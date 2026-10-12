@@ -1,0 +1,41 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3050",
+  "cpu_submission_ms": {
+    "max": 0.0772,
+    "mean": 0.0358025,
+    "p95": 0.0515
+  },
+  "frames": 120,
+  "gpu_ms": {
+    "max": 3.9168,
+    "mean": 1.9276344000000007,
+    "p95": 3.892224
+  },
+  "height": 1080,
+  "includes_capture": false,
+  "includes_presentation": false,
+  "outputs": 3,
+  "physical_projectors": false,
+  "resource_uploads": [
+    {
+      "composition_targets": 1,
+      "curves": 1,
+      "masks": 0,
+      "meshes": 1
+    },
+    {
+      "composition_targets": 1,
+      "curves": 1,
+      "masks": 0,
+      "meshes": 1
+    },
+    {
+      "composition_targets": 1,
+      "curves": 1,
+      "masks": 0,
+      "meshes": 1
+    }
+  ],
+  "software": false,
+  "width": 1920
+}

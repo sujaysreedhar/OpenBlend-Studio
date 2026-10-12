@@ -1,0 +1,593 @@
+{
+  "applications": [
+    {
+      "api": "dx11",
+      "enabled": false,
+      "excluded": false,
+      "executable": "FlightSimulator.exe",
+      "id": "18dda90e00b157e4-9",
+      "name": "Microsoft Flight Simulator 2020",
+      "output_id": "18dda90e00b157e4-3",
+      "simulator_version": "2020"
+    },
+    {
+      "api": "dx12",
+      "enabled": false,
+      "excluded": false,
+      "executable": "FlightSimulator2024.exe",
+      "id": "18dda90e00b157e4-a",
+      "name": "Microsoft Flight Simulator 2024",
+      "output_id": "18dda90e00b157e4-3",
+      "simulator_version": "2024"
+    }
+  ],
+  "calibration": {},
+  "id": "18dda90e00b157e4-1",
+  "locked": false,
+  "name": "Panoramic flight deck",
+  "outputs": [
+    {
+      "blend": {
+        "black_level": 0.0,
+        "bottom": 0.0,
+        "curve": [
+          {
+            "x": 0.0,
+            "y": 0.0
+          },
+          {
+            "x": 1.0,
+            "y": 1.0
+          }
+        ],
+        "gamma": 1.0,
+        "left": 0.0,
+        "right": 0.1,
+        "top": 0.0
+      },
+      "color": {
+        "brightness": 0.0,
+        "contrast": 1.0,
+        "gain": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "gamma": 1.0,
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "saturation": 1.0
+      },
+      "display": "",
+      "enabled": true,
+      "height": 1080,
+      "id": "18dda90e00b157e4-3",
+      "name": "Projector 1",
+      "surfaces": [
+        {
+          "enabled": true,
+          "id": "18dda90e00b157e4-4",
+          "mask": {
+            "bitmap": "",
+            "enabled": false,
+            "feather": 0.0,
+            "inverted": false,
+            "polygon": []
+          },
+          "mesh": {
+            "columns": 5,
+            "curved": false,
+            "points": [
+              {
+                "x": 0.0,
+                "y": 0.0
+              },
+              {
+                "x": 0.25,
+                "y": 0.0
+              },
+              {
+                "x": 0.5,
+                "y": 0.0
+              },
+              {
+                "x": 0.75,
+                "y": 0.0
+              },
+              {
+                "x": 1.0,
+                "y": 0.0
+              },
+              {
+                "x": 0.0,
+                "y": 0.25
+              },
+              {
+                "x": 0.25,
+                "y": 0.25
+              },
+              {
+                "x": 0.5,
+                "y": 0.25
+              },
+              {
+                "x": 0.75,
+                "y": 0.25
+              },
+              {
+                "x": 1.0,
+                "y": 0.25
+              },
+              {
+                "x": 0.0,
+                "y": 0.5
+              },
+              {
+                "x": 0.25,
+                "y": 0.5
+              },
+              {
+                "x": 0.5,
+                "y": 0.5
+              },
+              {
+                "x": 0.75,
+                "y": 0.5
+              },
+              {
+                "x": 1.0,
+                "y": 0.5
+              },
+              {
+                "x": 0.0,
+                "y": 0.75
+              },
+              {
+                "x": 0.25,
+                "y": 0.75
+              },
+              {
+                "x": 0.5,
+                "y": 0.75
+              },
+              {
+                "x": 0.75,
+                "y": 0.75
+              },
+              {
+                "x": 1.0,
+                "y": 0.75
+              },
+              {
+                "x": 0.0,
+                "y": 1.0
+              },
+              {
+                "x": 0.25,
+                "y": 1.0
+              },
+              {
+                "x": 0.5,
+                "y": 1.0
+              },
+              {
+                "x": 0.75,
+                "y": 1.0
+              },
+              {
+                "x": 1.0,
+                "y": 1.0
+              }
+            ],
+            "rows": 5
+          },
+          "name": "Main surface",
+          "opacity": 1.0,
+          "source_id": "18dda90e00b157e4-2",
+          "source_rect": {
+            "h": 1.0,
+            "w": 0.35714285714285715,
+            "x": 0.0,
+            "y": 0.0
+          }
+        }
+      ],
+      "viewport": {
+        "h": 1.0,
+        "w": 1.0,
+        "x": 0.0,
+        "y": 0.0
+      },
+      "width": 1920
+    },
+    {
+      "blend": {
+        "black_level": 0.0,
+        "bottom": 0.0,
+        "curve": [
+          {
+            "x": 0.0,
+            "y": 0.0
+          },
+          {
+            "x": 1.0,
+            "y": 1.0
+          }
+        ],
+        "gamma": 1.0,
+        "left": 0.1,
+        "right": 0.1,
+        "top": 0.0
+      },
+      "color": {
+        "brightness": 0.0,
+        "contrast": 1.0,
+        "gain": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "gamma": 1.0,
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "saturation": 1.0
+      },
+      "display": "",
+      "enabled": true,
+      "height": 1080,
+      "id": "18dda90e00b157e4-5",
+      "name": "Projector 2",
+      "surfaces": [
+        {
+          "enabled": true,
+          "id": "18dda90e00b157e4-6",
+          "mask": {
+            "bitmap": "",
+            "enabled": false,
+            "feather": 0.0,
+            "inverted": false,
+            "polygon": []
+          },
+          "mesh": {
+            "columns": 5,
+            "curved": false,
+            "points": [
+              {
+                "x": 0.0,
+                "y": 0.0
+              },
+              {
+                "x": 0.25,
+                "y": 0.0
+              },
+              {
+                "x": 0.5,
+                "y": 0.0
+              },
+              {
+                "x": 0.75,
+                "y": 0.0
+              },
+              {
+                "x": 1.0,
+                "y": 0.0
+              },
+              {
+                "x": 0.0,
+                "y": 0.25
+              },
+              {
+                "x": 0.25,
+                "y": 0.25
+              },
+              {
+                "x": 0.5,
+                "y": 0.25
+              },
+              {
+                "x": 0.75,
+                "y": 0.25
+              },
+              {
+                "x": 1.0,
+                "y": 0.25
+              },
+              {
+                "x": 0.0,
+                "y": 0.5
+              },
+              {
+                "x": 0.25,
+                "y": 0.5
+              },
+              {
+                "x": 0.5,
+                "y": 0.5
+              },
+              {
+                "x": 0.75,
+                "y": 0.5
+              },
+              {
+                "x": 1.0,
+                "y": 0.5
+              },
+              {
+                "x": 0.0,
+                "y": 0.75
+              },
+              {
+                "x": 0.25,
+                "y": 0.75
+              },
+              {
+                "x": 0.5,
+                "y": 0.75
+              },
+              {
+                "x": 0.75,
+                "y": 0.75
+              },
+              {
+                "x": 1.0,
+                "y": 0.75
+              },
+              {
+                "x": 0.0,
+                "y": 1.0
+              },
+              {
+                "x": 0.25,
+                "y": 1.0
+              },
+              {
+                "x": 0.5,
+                "y": 1.0
+              },
+              {
+                "x": 0.75,
+                "y": 1.0
+              },
+              {
+                "x": 1.0,
+                "y": 1.0
+              }
+            ],
+            "rows": 5
+          },
+          "name": "Main surface",
+          "opacity": 1.0,
+          "source_id": "18dda90e00b157e4-2",
+          "source_rect": {
+            "h": 1.0,
+            "w": 0.35714285714285715,
+            "x": 0.32142857142857145,
+            "y": 0.0
+          }
+        }
+      ],
+      "viewport": {
+        "h": 1.0,
+        "w": 1.0,
+        "x": 0.0,
+        "y": 0.0
+      },
+      "width": 1920
+    },
+    {
+      "blend": {
+        "black_level": 0.0,
+        "bottom": 0.0,
+        "curve": [
+          {
+            "x": 0.0,
+            "y": 0.0
+          },
+          {
+            "x": 1.0,
+            "y": 1.0
+          }
+        ],
+        "gamma": 1.0,
+        "left": 0.1,
+        "right": 0.0,
+        "top": 0.0
+      },
+      "color": {
+        "brightness": 0.0,
+        "contrast": 1.0,
+        "gain": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "gamma": 1.0,
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "saturation": 1.0
+      },
+      "display": "",
+      "enabled": true,
+      "height": 1080,
+      "id": "18dda90e00b157e4-7",
+      "name": "Projector 3",
+      "surfaces": [
+        {
+          "enabled": true,
+          "id": "18dda90e00b157e4-8",
+          "mask": {
+            "bitmap": "",
+            "enabled": false,
+            "feather": 0.0,
+            "inverted": false,
+            "polygon": []
+          },
+          "mesh": {
+            "columns": 5,
+            "curved": false,
+            "points": [
+              {
+                "x": 0.0,
+                "y": 0.0
+              },
+              {
+                "x": 0.25,
+                "y": 0.0
+              },
+              {
+                "x": 0.5,
+                "y": 0.0
+              },
+              {
+                "x": 0.75,
+                "y": 0.0
+              },
+              {
+                "x": 1.0,
+                "y": 0.0
+              },
+              {
+                "x": 0.0,
+                "y": 0.25
+              },
+              {
+                "x": 0.25,
+                "y": 0.25
+              },
+              {
+                "x": 0.5,
+                "y": 0.25
+              },
+              {
+                "x": 0.75,
+                "y": 0.25
+              },
+              {
+                "x": 1.0,
+                "y": 0.25
+              },
+              {
+                "x": 0.0,
+                "y": 0.5
+              },
+              {
+                "x": 0.25,
+                "y": 0.5
+              },
+              {
+                "x": 0.5,
+                "y": 0.5
+              },
+              {
+                "x": 0.75,
+                "y": 0.5
+              },
+              {
+                "x": 1.0,
+                "y": 0.5
+              },
+              {
+                "x": 0.0,
+                "y": 0.75
+              },
+              {
+                "x": 0.25,
+                "y": 0.75
+              },
+              {
+                "x": 0.5,
+                "y": 0.75
+              },
+              {
+                "x": 0.75,
+                "y": 0.75
+              },
+              {
+                "x": 1.0,
+                "y": 0.75
+              },
+              {
+                "x": 0.0,
+                "y": 1.0
+              },
+              {
+                "x": 0.25,
+                "y": 1.0
+              },
+              {
+                "x": 0.5,
+                "y": 1.0
+              },
+              {
+                "x": 0.75,
+                "y": 1.0
+              },
+              {
+                "x": 1.0,
+                "y": 1.0
+              }
+            ],
+            "rows": 5
+          },
+          "name": "Main surface",
+          "opacity": 1.0,
+          "source_id": "18dda90e00b157e4-2",
+          "source_rect": {
+            "h": 1.0,
+            "w": 0.35714285714285715,
+            "x": 0.6428571428571429,
+            "y": 0.0
+          }
+        }
+      ],
+      "viewport": {
+        "h": 1.0,
+        "w": 1.0,
+        "x": 0.0,
+        "y": 0.0
+      },
+      "width": 1920
+    }
+  ],
+  "presets": [],
+  "schema_version": 2,
+  "screen": {
+    "arc_degrees": 180.0,
+    "eye": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 2.5
+    },
+    "height": 1.6875,
+    "radius": 2.5,
+    "shape": "cylinder",
+    "width": 3.0
+  },
+  "sources": [
+    {
+      "cursor": true,
+      "display": "",
+      "executable": "",
+      "height": 1080,
+      "id": "18dda90e00b157e4-2",
+      "image": "",
+      "name": "Alignment grid",
+      "pattern": "grid",
+      "type": "pattern",
+      "width": 5760,
+      "window_class": "",
+      "window_handle": 0,
+      "window_title": ""
+    }
+  ],
+  "startup_preset": ""
+}

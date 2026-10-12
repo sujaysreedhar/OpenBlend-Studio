@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "date": "2026-10-12",
+  "toolchain": "MinGW GCC 13.1 / Qt 6.8.3 / OpenCV 4.11.0",
+  "passed": [
+    "core",
+    "camera",
+    "control",
+    "worker",
+    "gpu",
+    "dx12",
+    "adapter11",
+    "adapter12"
+  ],
+  "control_requires_loopback_network": true,
+  "remote_msvc_ci_run": false,
+  "physical_capture_projectors_simulators_qualified": false
+}

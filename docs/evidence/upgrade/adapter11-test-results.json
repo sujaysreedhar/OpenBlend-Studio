@@ -1,0 +1,10 @@
+{
+  "disable_reenable": true,
+  "failures": 0,
+  "multiple_swapchains": true,
+  "passed": true,
+  "physical_presentation_qualified": false,
+  "present": true,
+  "present1": true,
+  "resize": true
+}

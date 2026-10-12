@@ -1,0 +1,21 @@
+{
+  "adapter": "NVIDIA GeForce RTX 3050",
+  "cpu_submission_ms": {
+    "max": 0.1246,
+    "mean": 0.06449916666666668,
+    "p95": 0.0947
+  },
+  "frames": 120,
+  "gpu_ms": {
+    "max": 3.267584,
+    "mean": 1.398287733333333,
+    "p95": 3.07712
+  },
+  "height": 1080,
+  "includes_capture": false,
+  "includes_presentation": false,
+  "outputs": 3,
+  "physical_projectors": false,
+  "software": false,
+  "width": 1920
+}

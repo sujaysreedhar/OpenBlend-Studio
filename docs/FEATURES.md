@@ -1,0 +1,48 @@
+# Feature and milestone checklist
+
+Status meanings: **Implemented** = executable code with the listed evidence; **Partial** = some usable behavior, remaining work specified; **Unqualified** = code exists but its end-to-end/hardware gate has not passed; **Planned** = no implementation claim. None of the six complete release milestones is declared finished yet.
+
+The baseline comes from the user-approved feature plan and official product descriptions/manual references below. Product pages could not be re-fetched during implementation, and full reference manuals were unavailable. This is not an exhaustive setting-by-setting parity audit.
+
+| Feature | Source | Milestone | Implementation / validation evidence |
+|---|---|---:|---|
+| C++20, Qt editor, shared core, D3D11 renderer process | Approved architecture | 1 | Implemented; local MinGW release build and editor smoke render. MSVC CI configured, not yet executed remotely. |
+| Source crops, independent surface routes, images, patterns | [Mapper](https://fly.elise-ng.net/immersive-mapper-pro/) | 1–2 | Implemented; editor and GPU source pipeline. Desktop/window capture qualification below. |
+| 16 projectors / 256 surfaces | [Mapper](https://fly.elise-ng.net/immersive-mapper-pro/) | 2 | Model roundtrip and synthetic GPU composition checks. No 16-display hardware qualification. Limits are 64 logical outputs, 256 surfaces per output, subject to resources. |
+| Adjustable grids, linear/curved interpolation, inverse mapping | [Mapper manual](https://fly.elise-ng.net/wp-content/uploads/documents/mapper/ImmersiveMapperPROUserGuide.pdf) | 2 | Implemented bilinear/Catmull–Rom grids; CPU identity, affine, inverse and resampling checks; GPU warped-image checks. |
+| Point/group/row/column/boundary edits, locks, keys, undo | Same manual | 2 | Implemented editor tools and patch-based undo; geometry selection tests and smoke drag/undo/redo/lock checks. Broader UI interaction coverage remains. |
+| Polygon/bitmap masks, inversion, feathering, clipping | [Display manual](https://fly.elise-ng.net/wp-content/uploads/documents/display/ImmersiveDisplayPROUserGuide.pdf) | 2 | Implemented. Signed-distance polygon tests and GPU mask pixels; bitmap path uses WIC. Output clips naturally to its viewport. |
+| Blend widths/curve/gamma; RGB gain/offset and response | [Display](https://fly.elise-ng.net/immersive-display-pro/) | 2 | Implemented in linear light with sRGB input/output. Complementary blend math and CPU/GPU color checks. Arbitrary curves/gamma require installer tuning; automatic multi-projector normalization is not implemented. |
+| Black-level compensation | Same product / manual | 2,4 | Partial: manually adjusted black-floor shoulder outside overlap. No measured spatial leakage map or physically verified black matching. |
+| Presets, JSON recovery, locking, patterns, emergency stop | Same manuals | 2 | Implemented; atomic replace, backup and restore tests. Presets store output states; no timed show authoring. |
+| Output identification, shortcuts, startup profiles | Same manuals | 2 | Implemented: named output windows, patterns and `--project` startup. Version 0.2 adds fullscreen numeric identification, editable shortcuts and startup preset/profile management. |
+| Windows Graphics Capture | [Microsoft](https://learn.microsoft.com/en-us/windows/uwp/audio-video-camera/screen-capture) | 1–2 | Unqualified: actual WinRT capture implementation and live editor/worker routing. Current execution desktop produces occluded presentation and no WGC frames. Requires visible-desktop retest. |
+| DXGI Desktop Duplication | [Microsoft](https://learn.microsoft.com/en-us/windows/win32/direct3ddxgi/desktop-dup-api) | 1–2 | Unqualified: GPU copy path, loss error handling and feedback rejection implemented. GPU display rotation and color/mono/masked cursor composition pass synthetic pixel tests; visible-monitor qualification remains. Cross-GPU desktop capture rejected. |
+| Opt-in DX11 Present/Present1/ResizeBuffers adapter | Approved architecture / MinHook | 1–2 | Implemented and tested against our own process: warped GPU pixels, resize, viewport/topology restoration, disabling. Present1, multiple chains, recreation and disable/re-enable pass native adapter tests; real games remain unqualified. |
+| Per-application profiles/exclusions | [Display](https://fly.elise-ng.net/immersive-display-pro/) | 2 | Implemented format, explicit attach, profile-management UI, exclusions and MSFS 2020/2024 templates. No automatic application watcher. |
+| MSFS 2020 assistance, camera backup/restore | [Display manual](https://fly.elise-ng.net/wp-content/uploads/documents/display/ImmersiveDisplayPROUserGuide.pdf) | 2–3 | Partial: generic frustums, camera preview/append/restore, stale-file guard. Never run against MSFS in this environment. |
+| DX12 and MSFS 2024 | [MSFS requirements](https://www.flightsimulator.com/microsoft-flight-simulator-2024-faq/) | 3 | Native DX12 renderer, Present/Present1 adapter and independent C ABI implemented; observed/registered DIRECT queues only. DX12 reference pixels and native adapter tests pass. MSFS 2024 itself remains unqualified. |
+| Screen/eye geometry and view exports | Approved plan | 3 | Implemented plane and centered-cylinder frustums, including source overlap for a shared panorama. Imported screen geometry, off-center cylinder fitting and version-specific multi-view automation remain. |
+| Camera intrinsics, Gray-code decoding, planar fitting | [OpenCV structured light](https://docs.opencv.org/4.x/d1/dec/classcv_1_1structured__light_1_1GrayCodePattern.html) | 4 | Partial: OpenCV checkerboard calibration; independent Gray-code generator/decoder; robust homography, confidence rejection, error reporting, manual import. Synthetic tests only. |
+| Automatic scan scheduling, dense curved geometry, multiple cameras | Same calibration workflow | 4 | Planned. No claim of automatic physical camera/projector alignment. |
+| Automatic overlaps and photometric corrections | Approved plan | 4 | Partial: scalar response fitting math only. No capture orchestration, color measurement pipeline or physical validation. |
+| Authenticated remote editing and monitoring | [Reference release notes](https://fly.elise-ng.net/news/new-versions-of-fly-elise-ng-software/) | 5 | Implemented localhost HTTP/WebSocket commands, project replacement, presets, output controls and telemetry; authentication tests. LAN/TLS deployment remains. |
+| Multiple GPUs | Approved architecture | 5 | Partial: output groups select their GPU; desktop duplication requires the same adapter. No cross-adapter transport or multi-GPU timing qualification. |
+| External renderer interface | Approved architecture | 1,5 | Implemented versioned C ABI with error handling, context isolation and GPU tests. Descriptor types are documented; no external plugin discovery/loading or shared-handle transport yet. |
+| OpenGL, Vulkan, DX9/10, 32-bit helpers | Approved compatibility sequence | 5 | Planned; no adapter controls presented as operational. |
+| IddCx virtual source display | [Microsoft IddCx](https://learn.microsoft.com/en-us/windows-hardware/drivers/display/indirect-display-driver-model-overview) | 5 | Planned; no driver, signing or installation. |
+| NVIDIA native warp/blend | [NVIDIA](https://developer.nvidia.com/warp-and-blend) | 5 | Planned, requires supported hardware/SDK validation. |
+| AMD DOPP | [Reference support](https://fly.elise-ng.net/news/immersive-display-pro-v2-1r1/) | 5 | Research gate; current SDK and hardware support not established. |
+| Unity/Unreal integrations | Approved plan | 5 | Planned; generic frustums and C ABI are available foundations, not engine integrations. |
+| Optical flow, HDR, stereo, timestamped eyepoint updates | [Interpolation](https://fly.elise-ng.net/wp-content/uploads/documents/display/ImmersiveDisplayFrameInterpolation.pdf), [head tracking](https://fly.elise-ng.net/blog/immersive-display-pro-head-tracking/) | 6 | Planned. SDR rendering only; pose descriptor alone does not implement head tracking. |
+| Endurance, hot-plug, device loss, performance qualification | Approved release gates | 1–6 | Partial: resize and adapter disable tests; render-only GPU benchmark. Target/group recovery and capture retries implemented; simulated assignment loss/recovery passes, physical device removal/hot-plug remains unqualified. No sustained capture-to-projector 3×1080p60 qualification. |
+| Portable distribution, installation, corresponding source | Approved plan | 2 | Portable packaging, per-user installer/uninstaller scripts and source-package support implemented. Signing and public release remain. |
+
+## Next release gates
+
+1. Run WGC and DXGI capture tests on a visible unlocked desktop; qualify application exit, minimized windows, rotations and capture loss. Record actual capture-to-output latency.
+2. Qualify MSFS 2020/2024, actual device loss/hot-plug and sustained mixed-refresh presentation; record GPU/driver/simulator versions.
+3. Validate three real overlapping projectors and a camera before marking blends, alignment or photometric accuracy complete.
+4. Continue milestones 3–6 with independently usable, tested backends. Do not treat ABI declarations, documentation or synthetic data as implementation/hardware completion.
+
+The [0.2 three-phase upgrade](UPGRADE.md) records performance, UI and compatibility work separately from the original six broad milestones. [Compatibility matrix](COMPATIBILITY.md).

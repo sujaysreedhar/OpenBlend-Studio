@@ -1,0 +1,182 @@
+{
+  "applications": [
+    {
+      "api": "dx11",
+      "enabled": false,
+      "excluded": false,
+      "executable": "FlightSimulator.exe",
+      "id": "18dd8c87a8cce6f8-5",
+      "name": "Microsoft Flight Simulator 2020",
+      "output_id": "18dd8c87a8cce6f8-3"
+    }
+  ],
+  "calibration": {},
+  "id": "18dd8c87a8cce6f8-1",
+  "locked": false,
+  "name": "Architectural facets",
+  "outputs": [
+    {
+      "blend": {
+        "black_level": 0.0,
+        "bottom": 0.0,
+        "curve": [
+          {
+            "x": 0.0,
+            "y": 0.0
+          },
+          {
+            "x": 1.0,
+            "y": 1.0
+          }
+        ],
+        "gamma": 1.0,
+        "left": 0.0,
+        "right": 0.0,
+        "top": 0.0
+      },
+      "color": {
+        "brightness": 0.0,
+        "contrast": 1.0,
+        "gain": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "gamma": 1.0,
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "saturation": 1.0
+      },
+      "display": "",
+      "enabled": true,
+      "height": 1080,
+      "id": "18dd8c87a8cce6f8-3",
+      "name": "Projector 1",
+      "surfaces": [
+        {
+          "enabled": true,
+          "id": "18dd8c87a8cce6f8-4",
+          "mask": {
+            "bitmap": "",
+            "enabled": true,
+            "feather": 0.02,
+            "inverted": false,
+            "polygon": [
+              {
+                "x": 0.0,
+                "y": 0.0
+              },
+              {
+                "x": 1.0,
+                "y": 0.0
+              },
+              {
+                "x": 1.0,
+                "y": 0.8
+              },
+              {
+                "x": 0.65,
+                "y": 1.0
+              },
+              {
+                "x": 0.0,
+                "y": 1.0
+              }
+            ]
+          },
+          "mesh": {
+            "columns": 3,
+            "curved": false,
+            "points": [
+              {
+                "x": 0.1,
+                "y": 0.2
+              },
+              {
+                "x": 0.5,
+                "y": 0.0
+              },
+              {
+                "x": 0.85,
+                "y": 0.05
+              },
+              {
+                "x": 0.0,
+                "y": 0.5
+              },
+              {
+                "x": 0.5,
+                "y": 0.5
+              },
+              {
+                "x": 1.0,
+                "y": 0.5
+              },
+              {
+                "x": 0.18,
+                "y": 0.9
+              },
+              {
+                "x": 0.5,
+                "y": 1.0
+              },
+              {
+                "x": 0.9,
+                "y": 0.85
+              }
+            ],
+            "rows": 3
+          },
+          "name": "Main surface",
+          "opacity": 1.0,
+          "source_id": "18dd8c87a8cce6f8-2",
+          "source_rect": {
+            "h": 1.0,
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0
+          }
+        }
+      ],
+      "viewport": {
+        "h": 1.0,
+        "w": 1.0,
+        "x": 0.0,
+        "y": 0.0
+      },
+      "width": 1920
+    }
+  ],
+  "presets": [],
+  "schema_version": 1,
+  "screen": {
+    "arc_degrees": 180.0,
+    "eye": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 2.5
+    },
+    "height": 1.6875,
+    "radius": 2.5,
+    "shape": "plane",
+    "width": 3.0
+  },
+  "sources": [
+    {
+      "cursor": true,
+      "display": "",
+      "height": 1080,
+      "id": "18dd8c87a8cce6f8-2",
+      "image": "",
+      "name": "Alignment grid",
+      "pattern": "grid",
+      "type": "pattern",
+      "width": 1920,
+      "window_handle": 0,
+      "window_title": ""
+    }
+  ]
+}

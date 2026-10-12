@@ -1,0 +1,12 @@
+{
+  "disable_configuration": true,
+  "dx11_warp": true,
+  "physical_projectors": false,
+  "sample": {
+    "frames": 191,
+    "occluded_frames": 191,
+    "resizes": 1,
+    "state_errors": 0
+  },
+  "wgc": false
+}

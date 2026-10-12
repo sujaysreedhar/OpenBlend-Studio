@@ -1,0 +1,32 @@
+name: Windows build and tests
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  msvc:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+      - name: Build pinned dependencies and application
+        shell: pwsh
+        run: |
+          ./scripts/bootstrap.ps1 -Compiler msvc -WithOpenCV
+          $env:PATH = "$PWD/.tools/opencv-msvc/x64/vc17/bin;" + $env:PATH
+          cmake --preset windows-msvc -DPS_WITH_OPENCV=ON -DOpenCV_DIR="$PWD/.tools/opencv-msvc"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          cmake --build --preset windows-msvc --parallel 4
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          ctest --preset windows-msvc -LE desktop
+          exit $LASTEXITCODE
+      - name: Upload test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-test-evidence
+          path: |
+            build/msvc/Testing/Temporary/LastTest.log
+            build/msvc/camera-test-results.json

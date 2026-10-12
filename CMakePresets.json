@@ -1,0 +1,10 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {"name":"windows-msvc","generator":"Ninja","binaryDir":"${sourceDir}/build/msvc","cacheVariables":{"CMAKE_BUILD_TYPE":"RelWithDebInfo"}},
+    {"name":"portable","generator":"Ninja","binaryDir":"${sourceDir}/build/portable","cacheVariables":{"CMAKE_BUILD_TYPE":"Release"}},
+    {"name":"core","generator":"Ninja","binaryDir":"${sourceDir}/build/core","cacheVariables":{"CMAKE_BUILD_TYPE":"Debug","PS_BUILD_EDITOR":"OFF","PS_BUILD_ADAPTER":"OFF"}}
+  ],
+  "buildPresets":[{"name":"windows-msvc","configurePreset":"windows-msvc"},{"name":"portable","configurePreset":"portable"},{"name":"core","configurePreset":"core"}],
+  "testPresets":[{"name":"windows-msvc","configurePreset":"windows-msvc","output":{"outputOnFailure":true}},{"name":"portable","configurePreset":"portable","output":{"outputOnFailure":true}},{"name":"core","configurePreset":"core","output":{"outputOnFailure":true}}]
+}

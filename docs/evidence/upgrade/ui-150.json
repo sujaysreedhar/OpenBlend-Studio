@@ -1,0 +1,19 @@
+{
+  "drag_undo_redo_lock": true,
+  "guided_setup": true,
+  "input_to_paint_ms": {
+    "max": 0.9791,
+    "mean": 0.9425466666666666,
+    "p50": 0.9373,
+    "p95": 0.9626,
+    "p99": 0.9634,
+    "percentile_window": 30,
+    "samples": 30
+  },
+  "outputs": 3,
+  "persistent_property_focus": true,
+  "preview_ready": true,
+  "project_valid": true,
+  "render_error": "",
+  "zoom_pan_rectangle_numeric": true
+}
