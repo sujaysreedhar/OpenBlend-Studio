@@ -1,6 +1,6 @@
 # Calibration workflows
 
-The current calibration deliverable is offline processing. It does not automatically drive a projector/camera scan, discover physical screens, or combine multiple cameras.
+Version 0.4 adds a [guided camera calibration workflow](GUIDED_CALIBRATION.md) for single-camera planar scans, including pattern presentation/capture, optional undistortion, confidence/error reports, relative photometric estimates and reversible apply. The original offline commands remain available. Physical screen discovery and multiple-camera registration are not implemented.
 
 ## Camera intrinsics
 
@@ -12,7 +12,7 @@ projection-cli camera intrinsics.json 9 6 0.04 board-01.pgm board-02.pgm board-0
 
 OpenCV detects corners and estimates intrinsics/distortion using `calibrateCamera`. Output includes accepted-view count and global RMS reprojection error in pixels. Failed corner detections are skipped; fewer than six successful views is an error. A low residual alone does not prove a physically accurate camera model: poorly distributed views can produce unstable distortion coefficients.
 
-The packaged minimal OpenCV build supports PGM/BMP calibration images. Renderer image sources use Windows codecs independently. The standalone intrinsics result is not yet automatically consumed to undistort the Gray-code capture sequence; undistort the images consistently before fitting if lens distortion is significant.
+The packaged minimal OpenCV build supports PGM/BMP calibration images and DirectShow camera capture. Renderer image sources use Windows codecs independently. The guided wizard accepts the standalone intrinsics result and consistently undistorts both Gray-code and photometric captures at the calibrated resolution. The legacy offline `calibrate` command still expects consistently prepared input images.
 
 ## Planar projector mapping
 
@@ -26,4 +26,4 @@ Pure-core tests cover non-power-of-two patterns, exact Gray decoding, contrast r
 
 ## Remaining stages
 
-Real-time synchronized scanning, camera undistortion integration, dense mappings, cylindrical/dome/imported-mesh fitting, reference constraints, multiple-camera registration, overlap normalization and spatial photometric correction remain unimplemented. Scalar `photometric_fit` is available in the core but has no automatic measurement workflow. Physical projector validation is a required release gate.
+Hardware-synchronized scanning, dense mappings, cylindrical/dome/imported-mesh fitting, reference constraints, multiple-camera registration, overlap normalization and spatial photometric correction remain unimplemented. The guided scan measures five neutral RGB ramps for relative response fitting; camera limitations and the single renderer gamma control limit this estimate. Physical projector validation is a required release gate.

@@ -12,6 +12,11 @@
 #include <QAbstractButton>
 #include <QAction>
 #include <memory>
+#include <QDialog>
+#include <QTableWidget>
+#include <QPushButton>
+#include <QEventLoop>
+#include <QComboBox>
 void MainWindow::smoke(const QString& directory) {
     QDir().mkpath(directory);
     QTimer::singleShot(1200, this, [this, directory] {
@@ -112,9 +117,119 @@ void MainWindow::smoke(const QString& directory) {
             undo_.clear();
             view_->clear_selection();
             refresh();
+            check_setup();
+            auto* checker = findChild<QDialog*>("setupCheck");
+            require(checker, "Setup checker did not open");
+            checker->findChild<QLineEdit*>("checkReportDirectory")->setText(directory + "/checks");
+            auto* run = checker->findChild<QPushButton*>("runSetupCheck");
+            run->click();
+            QEventLoop check_loop;
+            QTimer poll;
+            poll.setInterval(25);
+            QElapsedTimer limit;
+            limit.start();
+            connect(&poll, &QTimer::timeout, &check_loop, [&] {
+                if (run->isEnabled() || limit.elapsed() > 15000)
+                    check_loop.quit();
+            });
+            poll.start();
+            check_loop.exec();
+            poll.stop();
+            if (!(run->isEnabled() && checker->findChild<QTableWidget*>("checkResults")->rowCount() > 0))
+                throw std::runtime_error("Setup checker: " +
+                                         checker->findChild<QLabel*>("checkStatus")->text().toStdString());
+            checker->grab().save(directory + "/setup-check.png");
+            auto await_check = [&](const std::function<bool()>& ready) {
+                QEventLoop loop;
+                QTimer timer;
+                QElapsedTimer deadline;
+                deadline.start();
+                connect(&timer, &QTimer::timeout, &loop, [&] {
+                    if (ready() || deadline.elapsed() > 15000)
+                        loop.quit();
+                });
+                timer.start(25);
+                loop.exec();
+                require(ready(), "Timed setup check did not respond");
+            };
+            checker->findChild<QComboBox*>("checkMode")->setCurrentIndex(1);
+            checker->findChild<QCheckBox*>("checkSimulation")->setChecked(true);
+            for (bool use_blackout : {false, true}) {
+                run->click();
+                await_check([&] {
+                    return checker->findChild<QLabel*>("checkStatus")->text().contains("measuring output");
+                });
+                project_.locked = true;
+                if (use_blackout)
+                    set_blackout(true);
+                else
+                    stop_output();
+                await_check([&] { return run->isEnabled(); });
+                require(checker->findChild<QLabel*>("checkStatus")->text().contains("cancelled"),
+                        "Emergency control did not cancel setup run while locked");
+                project_.locked = false;
+                set_blackout(false);
+            }
+            checker->close();
+            auto pre_scan=project_;
+            project_=ps::example_project(2);
+            for(auto& o:project_.outputs){o.width=64;o.height=48;}
+            undo_.clear();refresh();
+            auto uncalibrated=ps::project_json(project_);
+            QString calibration_failure;
+            auto automate_scan=[&](int cancellation) {
+                QTimer::singleShot(0,this,[&,cancellation] {
+                    auto* w=findChild<QWizard*>("calibrationWizard");
+                    try {
+                        require(w,"Missing calibration wizard");
+                        w->findChild<QComboBox*>("scanMode")->setCurrentIndex(1);
+                        w->findChild<QSpinBox*>("scanCameraWidth")->setValue(112);
+                        w->findChild<QSpinBox*>("scanCameraHeight")->setValue(48);
+                        w->findChild<QLineEdit*>("scanFolder")->setText(directory+"/scan-"+QString::number(cancellation));
+                        w->button(QWizard::NextButton)->click();w->button(QWizard::NextButton)->click();
+                        auto* start=w->findChild<QPushButton*>("startCalibrationScan");start->click();
+                        if(cancellation) {
+                            project_.locked=true;
+                            if(cancellation==1)stop_output();else set_blackout(true);
+                        }
+                        auto* poll=new QTimer(w);auto clock=std::make_shared<QElapsedTimer>();clock->start();
+                        connect(poll,&QTimer::timeout,w,[&,w,start,poll,clock,cancellation] {
+                            if(!start->isEnabled() && clock->elapsed()<20000)return;
+                            poll->stop();
+                            try {
+                                require(start->isEnabled(),"Calibration runner timed out");
+                                if(cancellation) {
+                                    require(w->findChild<QLabel*>("scanStatus")->text().contains("cancelled"),"Calibration emergency stop failed");
+                                    project_.locked=false;set_blackout(false);w->reject();
+                                } else {
+                                    require(w->findChild<QTableWidget*>("scanResults")->rowCount()==2,"Calibration did not report both projectors");
+                                    w->button(QWizard::NextButton)->click();
+                                    w->findChild<QComboBox*>("scanPreviewLayer")->setCurrentIndex(4);
+                                    w->grab().save(directory+"/calibration.png");
+                                    w->button(QWizard::FinishButton)->click();
+                                }
+                            }catch(const std::exception& e){calibration_failure=e.what();w->reject();}
+                        });poll->start(25);
+                    }catch(const std::exception& e){calibration_failure=e.what();if(w)w->reject();}
+                });
+                calibrate_installation();
+                if(!calibration_failure.isEmpty())throw std::runtime_error(calibration_failure.toStdString());
+            };
+            automate_scan(0);
+            require(project_.presets.size()==2 && project_.calibration.at("model")=="guided-planar-calibration","Calibration apply did not save reversible presets");
+            undo_.undo();require(ps::project_json(project_)==uncalibrated,"Calibration undo failed");
+            undo_.redo();require(project_.presets.size()==2,"Calibration redo failed");
+            undo_.undo();
+            automate_scan(1);automate_scan(2);
+            require(ps::project_json(project_)==uncalibrated,"Cancelled scan changed project");
+            project_=pre_scan;undo_.clear();refresh();
             preview(false);
             auto result =
-                std::make_shared<ps::Json>(ps::Json{{"guided_setup", true},
+                std::make_shared<ps::Json>(ps::Json{{"setup_checker", true},
+                                                    {"setup_stop_blackout_while_locked", true},
+                                                    {"guided_calibration_apply_undo_redo", true},
+                                                    {"calibration_stop_blackout_while_locked", true},
+                                                    {"guided_setup", true},
                                                     {"drag_undo_redo_lock", true},
                                                     {"persistent_property_focus", true},
                                                     {"zoom_pan_rectangle_numeric", true},

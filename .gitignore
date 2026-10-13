@@ -6,3 +6,5 @@
 *.log
 *.bak
 __pycache__/
+
+/reports/

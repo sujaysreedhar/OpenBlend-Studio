@@ -74,6 +74,8 @@ class MainWindow : public QMainWindow {
     void manage_presets();
     void edit_shortcuts();
     void show_diagnostics();
+    void check_setup();
+    void use_capture_fallback();
     void filter_installation(const QString&);
 #ifdef _WIN32
 #endif
@@ -88,6 +90,7 @@ class MainWindow : public QMainWindow {
     void send(const ps::Json&);
     void set_blackout(bool);
     void import_calibration();
+    void calibrate_installation();
     void export_views();
     void camera_patch(bool restore = false);
     void configure_remote();

@@ -1,0 +1,23 @@
+{
+  "calibration_stop_blackout_while_locked": true,
+  "drag_undo_redo_lock": true,
+  "guided_calibration_apply_undo_redo": true,
+  "guided_setup": true,
+  "input_to_paint_ms": {
+    "max": 1.1183,
+    "mean": 1.0850833333333332,
+    "p50": 1.0813,
+    "p95": 1.1094,
+    "p99": 1.1122,
+    "percentile_window": 30,
+    "samples": 30
+  },
+  "outputs": 3,
+  "persistent_property_focus": true,
+  "preview_ready": true,
+  "project_valid": true,
+  "render_error": "",
+  "setup_checker": true,
+  "setup_stop_blackout_while_locked": true,
+  "zoom_pan_rectangle_numeric": true
+}

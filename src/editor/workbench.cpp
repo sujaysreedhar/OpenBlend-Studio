@@ -459,7 +459,7 @@ void MainWindow::show_diagnostics() {
     layout->addWidget(export_button);
     auto snapshot = [this] {
         return ps::Json{
-            {"version", "0.2.0"},
+            {"version", "0.4.0"},
             {"preview_error", render_error_.toStdString()},
             {"renderer", last_telemetry_},
             {"qualification", "See docs/VALIDATION.md; software telemetry is not physical display latency"}};

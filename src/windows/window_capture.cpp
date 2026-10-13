@@ -59,6 +59,7 @@ struct Arrived : IUnknown {
 struct WindowCapture::Impl {
     std::chrono::steady_clock::time_point started = std::chrono::steady_clock::now();
     HWND window{};
+    DWORD window_pid{};
     Com<ID3D11Device> device;
     Com<ID3D11DeviceContext> context;
     Com<IInspectable> runtime_device;
@@ -85,6 +86,7 @@ WindowCapture::WindowCapture(ID3D11Device* device, HWND window, bool cursor)
     device->GetImmediateContext(p.context.put());
     DWORD pid{};
     GetWindowThreadProcessId(window, &pid);
+    p.window_pid = pid;
     if (!IsWindow(window) || pid == GetCurrentProcessId())
         throw std::runtime_error("Select an existing window outside the rendering process");
     wchar_t class_name[256]{};
@@ -129,8 +131,12 @@ WindowCapture::WindowCapture(ID3D11Device* device, HWND window, bool cursor)
 WindowCapture::~WindowCapture() = default;
 bool WindowCapture::update() {
     auto& p = *impl_;
-    if (!IsWindow(p.window))
+    DWORD pid{};
+    GetWindowThreadProcessId(p.window, &pid);
+    if (!IsWindow(p.window) || pid != p.window_pid)
         throw std::runtime_error("Captured window has closed; select its replacement");
+    if (IsIconic(p.window) || !IsWindowVisible(p.window))
+        throw std::runtime_error("Source window is minimized or hidden; waiting for restoration");
     Com<capture_abi::Frame> frame;
     check(p.pool->Next(frame.put()), "Read captured window frame");
     if (!frame && !p.view && std::chrono::steady_clock::now() - p.started > std::chrono::seconds(3))

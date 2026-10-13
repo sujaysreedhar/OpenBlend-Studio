@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 #include "ps/calibration.hpp"
+#include "ps/scan.hpp"
 #include <iostream>
 #include <opencv2/calib3d.hpp>
 #include <opencv2/imgcodecs.hpp>
@@ -33,6 +34,18 @@ int main() {
             paths.push_back(path);
         }
         auto result = ps::calibrate_camera(paths, 9, 6, .04);
+        ps::GrayFrame frame{32,24,std::vector<std::uint8_t>(32*24)};
+        for(size_t i=0;i<frame.pixels.size();++i)frame.pixels[i]=std::uint8_t(i%255);
+        ps::Json intrinsics={{"width",32},{"height",24},{"camera_matrix",{30,0,16,0,30,12,0,0,1}},
+                             {"distortion",{0,0,0,0,0}}};
+        if(ps::undistort_capture(frame,intrinsics).pixels!=frame.pixels)
+            throw std::runtime_error("Zero-distortion correction changed pixels");
+        intrinsics["distortion"][0]=.25;
+        if(ps::undistort_capture(frame,intrinsics).pixels==frame.pixels)
+            throw std::runtime_error("Lens distortion correction did not remap pixels");
+        intrinsics["width"]=33;bool rejected=false;
+        try{ps::undistort_capture(frame,intrinsics);}catch(const std::exception&){rejected=true;}
+        if(!rejected)throw std::runtime_error("Mismatched camera intrinsics accepted");
         std::cout << result.dump(2) << '\n';
         double fx = result["camera_matrix"][0], fy = result["camera_matrix"][4];
         if (std::abs(fx - 900) > 60 || std::abs(fy - 910) > 60 || result["rms_pixels"].get<double>() > 1)

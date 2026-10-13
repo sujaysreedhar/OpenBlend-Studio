@@ -85,7 +85,9 @@ std::vector<WindowInfo> windows() {
 HWND resolve_window(const Source& source) {
     const auto candidates = windows();
     auto equal_path = [](const std::string& a, const std::string& b) {
-        return _wcsicmp(wide(a).c_str(), wide(b).c_str()) == 0;
+        auto left = std::filesystem::path(wide(a)).lexically_normal().make_preferred();
+        auto right = std::filesystem::path(wide(b)).lexically_normal().make_preferred();
+        return _wcsicmp(left.c_str(), right.c_str()) == 0;
     };
     auto matches = [&](const WindowInfo& w) {
         return (source.executable.empty() || equal_path(w.executable, source.executable)) &&

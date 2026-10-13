@@ -188,6 +188,10 @@ MainWindow::MainWindow() : project_(ps::example_project(3)), remote_(this) {
     examples->addAction("Three-projector flight deck", this, [example] { example(3, false); });
     examples->addAction("Architectural facets", this, [example] { example(1, true); });
     auto* tools = menuBar()->addMenu("&Tools");
+    auto* check_action = tools->addAction("Check my setup…", this, [this] { check_setup(); });
+    check_action->setObjectName("checkSetupAction");
+    tools->addAction("Use window capture for attached application…", this,
+                     [this] { use_capture_fallback(); });
     tools->addAction("Attach application…", this, [this] { attach_application(); });
     tools->addAction("Application profiles…", this, [this] { manage_profiles(); });
     tools->addAction("Presets and startup…", this, [this] { manage_presets(); });
@@ -196,6 +200,7 @@ MainWindow::MainWindow() : project_(ps::example_project(3)), remote_(this) {
     tools->addAction("MSFS camera export...", this, [this] { camera_patch(); });
     tools->addAction("Restore MSFS camera backup...", this, [this] { camera_patch(true); });
     tools->addAction("Import planar calibration...", this, [this] { import_calibration(); });
+    tools->addAction("Guided camera calibration...", this, [this] { calibrate_installation(); });
     tools->addAction("Local control API...", this, [this] { configure_remote(); });
     tools->addAction("Show capabilities", this, [this] {
         QMessageBox::information(
@@ -543,7 +548,7 @@ MainWindow::MainWindow() : project_(ps::example_project(3)), remote_(this) {
     });
     live_.start();
     remote_.status = [this] {
-        return ps::Json{{"version", "0.2.0"},
+        return ps::Json{{"version", "0.4.0"},
                         {"project", project_.name},
                         {"outputs", project_.outputs.size()},
                         {"running", worker_.state() != QProcess::NotRunning},
@@ -1247,6 +1252,11 @@ void MainWindow::update_adapter() {
     }
 }
 void MainWindow::attach_application() {
+    if (auto* test = findChild<QProcess*>("setupCheckProcess");
+        test && test->state() != QProcess::NotRunning) {
+        error("Stop the setup test before attaching an application");
+        return;
+    }
     if (!output())
         return;
     try {
@@ -1320,6 +1330,11 @@ void MainWindow::attach_application() {
     }
 }
 void MainWindow::start_output(bool fullscreen) {
+    if (auto* test = findChild<QProcess*>("setupCheckProcess");
+        test && test->state() != QProcess::NotRunning) {
+        error("Stop the setup test before starting another output");
+        return;
+    }
     stop_output();
     if (worker_.state() != QProcess::NotRunning) {
         queued_output_ = fullscreen ? 1 : 0;
@@ -1346,6 +1361,10 @@ void MainWindow::start_output(bool fullscreen) {
     }
 }
 void MainWindow::stop_output() {
+    if (auto* cancel = findChild<QPushButton*>("cancelCalibrationScan"))
+        cancel->click();
+    if (auto* cancel = findChild<QPushButton*>("cancelSetupCheck"))
+        cancel->click();
     if (!adapter_manifest_.isEmpty()) {
         try {
             auto file = fs(adapter_manifest_);
@@ -1369,6 +1388,12 @@ void MainWindow::stop_output() {
     connect_timer_.stop();
 }
 void MainWindow::set_blackout(bool enabled) {
+    if (enabled)
+        if (auto* cancel = findChild<QPushButton*>("cancelCalibrationScan"))
+            cancel->click();
+    if (enabled)
+        if (auto* cancel = findChild<QPushButton*>("cancelSetupCheck"))
+            cancel->click();
     if (auto* action = findChild<QAction*>("blackoutAction")) {
         QSignalBlocker blocker(action);
         action->setChecked(enabled);

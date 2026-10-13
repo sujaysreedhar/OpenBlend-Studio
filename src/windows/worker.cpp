@@ -111,6 +111,11 @@ struct Pipe {
             if (pending.size() > 32 * 1024 * 1024)
                 throw std::runtime_error("Oversized control message");
         }
+        auto read_error = GetLastError();
+        if (read_error == ERROR_BROKEN_PIPE) {
+            disconnect();
+            return messages;
+        }
         size_t pos;
         while ((pos = pending.find('\n')) != std::string::npos) {
             auto parsed = Json::parse(pending.substr(0, pos), nullptr, false);
@@ -121,6 +126,12 @@ struct Pipe {
             pending.erase(0, pos + 1);
         }
         return messages;
+    }
+    void disconnect() {
+        DisconnectNamedPipe(handle);
+        connected = false;
+        pending.clear();
+        outgoing.clear();
     }
     void send(const Json& j) {
         if (!connected)
@@ -157,7 +168,8 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int) {
     auto argv = CommandLineToArgvW(GetCommandLineW(), &argc);
     std::filesystem::path project_path, status_path;
     std::wstring pipe_name;
-    bool fullscreen = false, software = false;
+    bool fullscreen = false, software = false, native_size = false;
+    double duration_limit = 0;
     int frame_limit = 0;
     for (int i = 1; i < argc; ++i) {
         std::wstring a = argv[i];
@@ -169,6 +181,10 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int) {
             status_path = argv[++i];
         else if (a == L"--fullscreen")
             fullscreen = true;
+        else if (a == L"--duration" && i + 1 < argc)
+            duration_limit = _wtof(argv[++i]);
+        else if (a == L"--native-size")
+            native_size = true;
         else if (a == L"--blackout")
             blackout = true;
         else if (a == L"--software")
@@ -185,6 +201,8 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int) {
             };
     };
     try {
+        if (!std::isfinite(duration_limit) || duration_limit < 0 || duration_limit > 90000)
+            throw std::runtime_error("Invalid duration limit");
         if (project_path.empty())
             throw std::runtime_error("Use --project path.json [--fullscreen] [--pipe name]");
         auto project = load_project(project_path);
@@ -275,6 +293,10 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int) {
                     t->renderer->set_asset_directory(project_path.parent_path());
                     t->timing = std::make_unique<GpuTiming>(gp->device.get());
                     int x = 60 + int(index % 3) * 400, y = 80 + int(index / 3) * 270, w = 384, h = 216;
+                    if (native_size) {
+                        w = o.width;
+                        h = o.height;
+                    }
                     if (fullscreen) {
                         int dw = display->bounds.right - display->bounds.left,
                             dh = display->bounds.bottom - display->bounds.top;
@@ -288,10 +310,14 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int) {
                     if (EnumDisplaySettingsW(wide(display->id).c_str(), ENUM_CURRENT_SETTINGS, &mode) &&
                         mode.dmDisplayFrequency > 1)
                         t->refresh_ms = 1000. / mode.dmDisplayFrequency;
-                    t->window = CreateWindowExW(0, wc.lpszClassName,
-                                                wide(o.name + " - Projection Studio [Esc to stop]").c_str(),
-                                                fullscreen ? WS_POPUP : WS_OVERLAPPEDWINDOW, x, y, w, h,
-                                                nullptr, nullptr, instance, nullptr);
+                    DWORD style = fullscreen ? WS_POPUP : WS_OVERLAPPEDWINDOW;
+                    RECT client{0, 0, w, h};
+                    if (!fullscreen)
+                        AdjustWindowRectEx(&client, style, FALSE, 0);
+                    t->window = CreateWindowExW(
+                        0, wc.lpszClassName, wide(o.name + " - Projection Studio [Esc to stop]").c_str(),
+                        style, x, y, client.right - client.left, client.bottom - client.top, nullptr, nullptr,
+                        instance, nullptr);
                     if (!t->window)
                         throw std::runtime_error("Cannot create output window");
                     SetWindowDisplayAffinity(t->window, 0x11);
@@ -383,6 +409,13 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int) {
                                {"occluded", t->occluded},
                                {"late_submissions", t->late_submissions},
                                {"resource_generation", t->generation},
+                               {"width", t->width},
+                               {"height", t->height},
+                               {"failures", t->failures},
+                               {"refresh_hz", 1000. / t->refresh_ms},
+                               {"display", std::find_if(project.outputs.begin(), project.outputs.end(),
+                                                        [&](const auto& o) { return o.id == id; })
+                                               ->display},
                                {"gpu_ms", t->timing->milliseconds.json()},
                                {"cpu_submission_ms", t->submission.json()},
                                {"present_interval_ms", t->intervals.json()},
@@ -398,6 +431,8 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int) {
             GetProcessMemoryInfo(GetCurrentProcess(), &m, sizeof(m));
             return Json{{"type", "stats"},
                         {"protocol", 2},
+                        {"elapsed_seconds",
+                         std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count()},
                         {"revision", replica.revision()},
                         {"frames", frames},
                         {"fps", frames / std::max(.001, std::chrono::duration<double>(
@@ -542,6 +577,8 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int) {
                 report(latest);
                 last_report = now;
             }
+            if (duration_limit > 0 && std::chrono::duration<double>(now - start).count() >= duration_limit)
+                break;
             if (frame_limit > 0 && int(frames) >= frame_limit)
                 break;
             // Bounded wait keeps control IPC and every output responsive; never waits for all outputs.

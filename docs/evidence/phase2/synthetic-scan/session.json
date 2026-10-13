@@ -1,0 +1,506 @@
+{
+  "camera": {
+    "exposure": -6.0,
+    "height": 48,
+    "index": 0,
+    "intrinsics": "",
+    "width": 112
+  },
+  "capture_synchronization": "software settling and frame draining; no hardware trigger",
+  "error": "",
+  "flush_frames": 4,
+  "max_rms": 2.0,
+  "min_contrast": 20,
+  "model": "guided-planar-scan",
+  "physically_validated": false,
+  "project_id": "18de209b4e007d2c-23",
+  "region": {
+    "h": 1.0,
+    "w": 1.0,
+    "x": 0.0,
+    "y": 0.0
+  },
+  "schema_version": 1,
+  "settle_ms": 500,
+  "started_utc": "2026-10-13T15:32:49Z",
+  "status": "complete",
+  "synthetic": true,
+  "targets": [
+    {
+      "captured": 31,
+      "display": "",
+      "folder": "projector-0",
+      "height": 48,
+      "name": "Projector 1",
+      "output_before": {
+        "blend": {
+          "black_level": 0.0,
+          "bottom": 0.0,
+          "curve": [
+            {
+              "x": 0.0,
+              "y": 0.0
+            },
+            {
+              "x": 1.0,
+              "y": 1.0
+            }
+          ],
+          "gamma": 1.0,
+          "left": 0.0,
+          "right": 0.1,
+          "top": 0.0
+        },
+        "color": {
+          "brightness": 0.0,
+          "contrast": 1.0,
+          "gain": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "gamma": 1.0,
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "saturation": 1.0
+        },
+        "display": "",
+        "enabled": true,
+        "height": 48,
+        "id": "18de209b4e007d2c-25",
+        "name": "Projector 1",
+        "surfaces": [
+          {
+            "enabled": true,
+            "id": "18de209b4e007d2c-26",
+            "mask": {
+              "bitmap": "",
+              "enabled": false,
+              "feather": 0.0,
+              "inverted": false,
+              "polygon": []
+            },
+            "mesh": {
+              "columns": 5,
+              "curved": false,
+              "points": [
+                {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.5,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.75,
+                  "y": 0.0
+                },
+                {
+                  "x": 1.0,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.0,
+                  "y": 0.25
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.25
+                },
+                {
+                  "x": 0.5,
+                  "y": 0.25
+                },
+                {
+                  "x": 0.75,
+                  "y": 0.25
+                },
+                {
+                  "x": 1.0,
+                  "y": 0.25
+                },
+                {
+                  "x": 0.0,
+                  "y": 0.5
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.5
+                },
+                {
+                  "x": 0.5,
+                  "y": 0.5
+                },
+                {
+                  "x": 0.75,
+                  "y": 0.5
+                },
+                {
+                  "x": 1.0,
+                  "y": 0.5
+                },
+                {
+                  "x": 0.0,
+                  "y": 0.75
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.75
+                },
+                {
+                  "x": 0.5,
+                  "y": 0.75
+                },
+                {
+                  "x": 0.75,
+                  "y": 0.75
+                },
+                {
+                  "x": 1.0,
+                  "y": 0.75
+                },
+                {
+                  "x": 0.0,
+                  "y": 1.0
+                },
+                {
+                  "x": 0.25,
+                  "y": 1.0
+                },
+                {
+                  "x": 0.5,
+                  "y": 1.0
+                },
+                {
+                  "x": 0.75,
+                  "y": 1.0
+                },
+                {
+                  "x": 1.0,
+                  "y": 1.0
+                }
+              ],
+              "rows": 5
+            },
+            "name": "Main surface",
+            "opacity": 1.0,
+            "source_id": "18de209b4e007d2c-24",
+            "source_rect": {
+              "h": 1.0,
+              "w": 0.5263157894736842,
+              "x": 0.0,
+              "y": 0.0
+            }
+          }
+        ],
+        "viewport": {
+          "h": 1.0,
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0
+        },
+        "width": 64
+      },
+      "output_id": "18de209b4e007d2c-25",
+      "patterns": [
+        "000.pgm",
+        "001.pgm",
+        "002.pgm",
+        "003.pgm",
+        "004.pgm",
+        "005.pgm",
+        "006.pgm",
+        "007.pgm",
+        "008.pgm",
+        "009.pgm",
+        "010.pgm",
+        "011.pgm",
+        "012.pgm",
+        "013.pgm",
+        "014.pgm",
+        "015.pgm",
+        "016.pgm",
+        "017.pgm",
+        "018.pgm",
+        "019.pgm",
+        "020.pgm",
+        "021.pgm",
+        "022.pgm",
+        "023.pgm",
+        "024.pgm",
+        "025.pgm"
+      ],
+      "photometric": [
+        "000.ppm",
+        "001.ppm",
+        "002.ppm",
+        "003.ppm",
+        "004.ppm"
+      ],
+      "source_before": {
+        "cursor": true,
+        "display": "",
+        "executable": "",
+        "height": 1080,
+        "id": "18de209b4e007d2c-24",
+        "image": "",
+        "name": "Alignment grid",
+        "pattern": "grid",
+        "type": "pattern",
+        "width": 3840,
+        "window_class": "",
+        "window_handle": 0,
+        "window_title": ""
+      },
+      "source_id": "18de209b4e007d2c-24",
+      "surface_id": "18de209b4e007d2c-26",
+      "width": 64
+    },
+    {
+      "captured": 31,
+      "display": "",
+      "folder": "projector-1",
+      "height": 48,
+      "name": "Projector 2",
+      "output_before": {
+        "blend": {
+          "black_level": 0.0,
+          "bottom": 0.0,
+          "curve": [
+            {
+              "x": 0.0,
+              "y": 0.0
+            },
+            {
+              "x": 1.0,
+              "y": 1.0
+            }
+          ],
+          "gamma": 1.0,
+          "left": 0.1,
+          "right": 0.0,
+          "top": 0.0
+        },
+        "color": {
+          "brightness": 0.0,
+          "contrast": 1.0,
+          "gain": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "gamma": 1.0,
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "saturation": 1.0
+        },
+        "display": "",
+        "enabled": true,
+        "height": 48,
+        "id": "18de209b4e007d2c-27",
+        "name": "Projector 2",
+        "surfaces": [
+          {
+            "enabled": true,
+            "id": "18de209b4e007d2c-28",
+            "mask": {
+              "bitmap": "",
+              "enabled": false,
+              "feather": 0.0,
+              "inverted": false,
+              "polygon": []
+            },
+            "mesh": {
+              "columns": 5,
+              "curved": false,
+              "points": [
+                {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.5,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.75,
+                  "y": 0.0
+                },
+                {
+                  "x": 1.0,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.0,
+                  "y": 0.25
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.25
+                },
+                {
+                  "x": 0.5,
+                  "y": 0.25
+                },
+                {
+                  "x": 0.75,
+                  "y": 0.25
+                },
+                {
+                  "x": 1.0,
+                  "y": 0.25
+                },
+                {
+                  "x": 0.0,
+                  "y": 0.5
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.5
+                },
+                {
+                  "x": 0.5,
+                  "y": 0.5
+                },
+                {
+                  "x": 0.75,
+                  "y": 0.5
+                },
+                {
+                  "x": 1.0,
+                  "y": 0.5
+                },
+                {
+                  "x": 0.0,
+                  "y": 0.75
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.75
+                },
+                {
+                  "x": 0.5,
+                  "y": 0.75
+                },
+                {
+                  "x": 0.75,
+                  "y": 0.75
+                },
+                {
+                  "x": 1.0,
+                  "y": 0.75
+                },
+                {
+                  "x": 0.0,
+                  "y": 1.0
+                },
+                {
+                  "x": 0.25,
+                  "y": 1.0
+                },
+                {
+                  "x": 0.5,
+                  "y": 1.0
+                },
+                {
+                  "x": 0.75,
+                  "y": 1.0
+                },
+                {
+                  "x": 1.0,
+                  "y": 1.0
+                }
+              ],
+              "rows": 5
+            },
+            "name": "Main surface",
+            "opacity": 1.0,
+            "source_id": "18de209b4e007d2c-24",
+            "source_rect": {
+              "h": 1.0,
+              "w": 0.5263157894736842,
+              "x": 0.47368421052631576,
+              "y": 0.0
+            }
+          }
+        ],
+        "viewport": {
+          "h": 1.0,
+          "w": 1.0,
+          "x": 0.0,
+          "y": 0.0
+        },
+        "width": 64
+      },
+      "output_id": "18de209b4e007d2c-27",
+      "patterns": [
+        "000.pgm",
+        "001.pgm",
+        "002.pgm",
+        "003.pgm",
+        "004.pgm",
+        "005.pgm",
+        "006.pgm",
+        "007.pgm",
+        "008.pgm",
+        "009.pgm",
+        "010.pgm",
+        "011.pgm",
+        "012.pgm",
+        "013.pgm",
+        "014.pgm",
+        "015.pgm",
+        "016.pgm",
+        "017.pgm",
+        "018.pgm",
+        "019.pgm",
+        "020.pgm",
+        "021.pgm",
+        "022.pgm",
+        "023.pgm",
+        "024.pgm",
+        "025.pgm"
+      ],
+      "photometric": [
+        "000.ppm",
+        "001.ppm",
+        "002.ppm",
+        "003.ppm",
+        "004.ppm"
+      ],
+      "source_before": {
+        "cursor": true,
+        "display": "",
+        "executable": "",
+        "height": 1080,
+        "id": "18de209b4e007d2c-24",
+        "image": "",
+        "name": "Alignment grid",
+        "pattern": "grid",
+        "type": "pattern",
+        "width": 3840,
+        "window_class": "",
+        "window_handle": 0,
+        "window_title": ""
+      },
+      "source_id": "18de209b4e007d2c-24",
+      "surface_id": "18de209b4e007d2c-28",
+      "width": 64
+    }
+  ]
+}

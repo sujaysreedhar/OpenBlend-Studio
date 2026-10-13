@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="5"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="2"
+	timestamp="2026-10-13T21:02:24"
+	>
+	<testcase name="core" classname="core" time="0.281235" status="run">
+		<properties/>
+		<system-out>2194 checks, 0 failures
+</system-out>
+	</testcase>
+	<testcase name="qualification" classname="qualification" time="0.147724" status="run">
+		<properties/>
+		<system-out>Qualification evaluator failures: 0
+</system-out>
+	</testcase>
+	<testcase name="scan" classname="scan" time="0.527654" status="run">
+		<properties/>
+		<system-out>Ordered capture, fit validation, shared ROI, overlap, photometry, masks, preset restore and failure tests passed
+</system-out>
+	</testcase>
+	<testcase name="gpu" classname="gpu" time="0.444748" status="run">
+		<properties/>
+		<system-out>D3D11 WARP render checks: 0 failures
+</system-out>
+	</testcase>
+	<testcase name="dx12" classname="dx12" time="0.813625" status="run">
+		<properties/>
+		<system-out>identity max pixel error=0
+cache reuse max pixel error=0
+curved warp max pixel error=0
+feathered mask max pixel error=0
+inverted mask max pixel error=0
+linear blend and color max pixel error=0
+blackout max pixel error=0
+empty output max pixel error=0
+DX12 regression failures: 0
+</system-out>
+	</testcase>
+</testsuite>

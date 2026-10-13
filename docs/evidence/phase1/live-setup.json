@@ -1,0 +1,129 @@
+{
+  "adapters": [
+    {
+      "dedicated_memory_bytes": 8432648192,
+      "device_id": 9479,
+      "dx11_device": true,
+      "dx12_device": true,
+      "luid": "0:56073",
+      "name": "NVIDIA GeForce RTX 3050",
+      "software": false,
+      "umd_driver_version": "32.0.15.9186",
+      "vendor_id": 4318
+    },
+    {
+      "dedicated_memory_bytes": 8432648192,
+      "device_id": 9479,
+      "dx11_device": true,
+      "dx12_device": true,
+      "luid": "0:403379197",
+      "name": "NVIDIA GeForce RTX 3050",
+      "software": false,
+      "umd_driver_version": "32.0.15.9186",
+      "vendor_id": 4318
+    },
+    {
+      "dedicated_memory_bytes": 0,
+      "device_id": 140,
+      "dx11_device": true,
+      "dx12_device": true,
+      "luid": "0:60097",
+      "name": "Microsoft Basic Render Driver",
+      "software": true,
+      "umd_driver_version": "10.0.26100.9278",
+      "vendor_id": 5140
+    }
+  ],
+  "application_version": "0.3.0",
+  "applications": [
+    {
+      "api": "dx11",
+      "enabled": false,
+      "excluded": false,
+      "instances": [],
+      "name": "Microsoft Flight Simulator 2020",
+      "qualification": "not_run",
+      "simulator_version": ""
+    }
+  ],
+  "capture": {
+    "18dd8c87a72e0fc0-2": {
+      "arrival_age_ms": {
+        "max": 80.6504,
+        "mean": 25.327875000000002,
+        "p50": 1.9693,
+        "p95": 16.7805,
+        "p99": 16.7805,
+        "percentile_window": 4,
+        "samples": 4
+      },
+      "first_timestamp_100ns": 3755930625000,
+      "frames": 31,
+      "last_timestamp_100ns": 3755958750000,
+      "type": "window"
+    }
+  },
+  "checks": [
+    {
+      "action": "",
+      "detail": "Project structure and routes are valid",
+      "id": "project",
+      "status": "pass"
+    },
+    {
+      "action": "",
+      "detail": "Attached displays enumerated",
+      "id": "desktop",
+      "status": "pass"
+    },
+    {
+      "action": "Assign and enable the projector before running a physical output test",
+      "detail": "Projector has no connected display assignment",
+      "id": "output/18dd8c87a72e0fc0-3",
+      "status": "blocked"
+    },
+    {
+      "action": "Assign and enable the projector before running a physical output test",
+      "detail": "Projector has no connected display assignment",
+      "id": "output/18dd8c87a72e0fc0-5",
+      "status": "blocked"
+    },
+    {
+      "action": "Assign and enable the projector before running a physical output test",
+      "detail": "Projector has no connected display assignment",
+      "id": "output/18dd8c87a72e0fc0-7",
+      "status": "blocked"
+    },
+    {
+      "action": "Keep the source visible and moving on an unlocked desktop; inspect permissions if no frames arrive",
+      "detail": "GPU capture frames arrived; pixels were not saved",
+      "id": "capture/18dd8c87a72e0fc0-2",
+      "status": "pass"
+    }
+  ],
+  "created_utc": "2026-10-12T13:35:08Z",
+  "displays": [
+    {
+      "adapter_luid": "0:56073",
+      "height": 1080,
+      "id": "\\\\.\\DISPLAY225",
+      "name": "\\\\.\\DISPLAY225 / NVIDIA GeForce RTX 3050",
+      "refresh_hz": 32,
+      "rotation": 1,
+      "width": 1920,
+      "x": 0,
+      "y": 0
+    }
+  ],
+  "kind": "setup-check",
+  "os": {
+    "build": "26200",
+    "display_version": "25H2",
+    "remote_session": true
+  },
+  "project_id": "18dd8c87a72e0fc0-1",
+  "release_qualified": false,
+  "schema_version": 1,
+  "status": "incomplete",
+  "stores_captured_pixels": false
+}

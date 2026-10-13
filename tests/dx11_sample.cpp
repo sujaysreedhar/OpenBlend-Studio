@@ -7,7 +7,12 @@ using namespace ps;
 using namespace ps::win;
 namespace {
 bool running = true;
+bool resize_requested = false;
 LRESULT CALLBACK proc(HWND h, UINT m, WPARAM w, LPARAM l) {
+    if (m == WM_APP + 1) {
+        resize_requested = true;
+        return 0;
+    }
     if (m == WM_CLOSE) {
         running = false;
         return 0;
@@ -29,6 +34,8 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int) {
                 seconds = _wtoi(argv[++i]);
             else if (std::wstring(argv[i]) == L"--white")
                 pattern = 1;
+            else if (std::wstring(argv[i]) == L"--motion")
+                pattern = 8;
         }
         LocalFree(argv);
         WNDCLASSW wc{};
@@ -74,7 +81,7 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int) {
                 TranslateMessage(&m);
                 DispatchMessageW(&m);
             }
-            if (frames == 180) {
+            if ((frames == 180 || resize_requested) && resizes == 0) {
                 context->OMSetRenderTargets(0, nullptr, nullptr);
                 check(swap->ResizeBuffers(0, 960, 600, DXGI_FORMAT_UNKNOWN, 0), "Resize test swapchain");
                 ++resizes;
@@ -88,7 +95,7 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int) {
             device->CreateRenderTargetView(back.get(), nullptr, rt.put());
             renderer.render(
                 o, [&](const std::string&) { return SourceTexture{nullptr, pattern}; }, rt.get(), d.Width,
-                d.Height);
+                d.Height, std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count());
             // Sentinels must survive presentation interception. The next frame resets them.
             D3D11_VIEWPORT sentinel{3, 7, 120, 90, .2f, .8f};
             context->RSSetViewports(1, &sentinel);
@@ -110,11 +117,17 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int) {
             ++frames;
         }
         if (!info.empty())
-            atomic_write(info.wstring() + L".done", Json{{"frames", frames},
-                                                         {"state_errors", state_errors},
-                                                         {"resizes", resizes},
-                                                         {"occluded_frames", occluded}}
-                                                        .dump());
+            atomic_write(
+                info.wstring() + L".done",
+                Json{{"frames", frames},
+                     {"state_errors", state_errors},
+                     {"resizes", resizes},
+                     {"requested_seconds", seconds},
+                     {"elapsed_seconds",
+                      std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count()},
+                     {"closed_by_message", !running},
+                     {"occluded_frames", occluded}}
+                    .dump());
         DestroyWindow(hwnd);
         return state_errors ? 2 : 0;
     } catch (const std::exception& e) {

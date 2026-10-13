@@ -6,9 +6,9 @@ Turn overlapping projector images into one continuous display. OpenBlend Studio 
 
 Written in C++20 with Qt 6, Direct3D 11/12 and HLSL, with optional OpenCV calibration tools. Application windows, executables and packages use the name **Projection Studio**. Code is **GPL-3.0-only**.
 
-## Status: 0.2.0 experimental
+## Status: 0.4.0 experimental
 
-The three-phase upgrade adds resource caching and asynchronous previews, a guided setup plus precise workbench, and native DX12 integration. Manual editing/rendering, schema migration and application samples have automated checks. Live capture, physical projectors and Microsoft Flight Simulator compatibility still require hardware testing. See the [upgrade record](docs/UPGRADE.md), [feature checklist](docs/FEATURES.md) and [validation evidence](docs/VALIDATION.md).
+Version 0.4 adds guided planar camera calibration: camera probes, ordered pattern projection/capture, lens correction, confidence/error maps, overlap and relative photometric estimates, and reversible presets. A synthetic demonstration works without a camera. Physical multi-projector alignment, performance, Desktop Duplication and Microsoft Flight Simulator compatibility remain unqualified. See the [guided calibration workflow](docs/GUIDED_CALIBRATION.md), [hardware testing guide](docs/HARDWARE_TESTING.md) and [validation evidence](docs/VALIDATION.md).
 
 ## Features
 
@@ -17,10 +17,11 @@ The three-phase upgrade adds resource caching and asynchronous previews, a guide
 - Linear-light edge blending, editable curves, polygon/bitmap masks, feathering, color response and manual black-level adjustment.
 - Pattern/image/window/desktop sources, cropping, independent surface routing, fullscreen or simulated outputs.
 - Guided setup, profile management, startup presets, editable shortcuts, saved dock layout, output identification, blackout and emergency stop.
+- Setup checks for displays, GPUs, capture sources and application versions; cancellable 1-minute, 10-minute and 8-hour output runs with saved telemetry.
 - Cached GPU resources, preview thread with three staging buffers, per-output pacing, revisioned IPC, selective rebuild/retry and diagnostics export.
 - Opt-in DX11/DX12 adapters; DX12 command queues must be observed or explicitly registered. Both are SDR and x64 only.
 - Separate MSFS 2020/2024 profiles and camera preview/backup/restore, generic frustum exports, localhost HTTP/WebSocket control and versioned C renderer APIs.
-- Offline Gray-code/planar calibration and optional OpenCV checkerboard intrinsics. Physical calibration remains unqualified.
+- Guided Gray-code/planar calibration with optional OpenCV DirectShow camera capture and lens correction; confidence/error maps, common camera-region routing, overlap estimates, relative RGB response corrections, before/after grids and reversible presets. Physical calibration remains unqualified.
 
 ## Quick start
 
@@ -31,7 +32,8 @@ Extract the portable package and run `projection-studio.exe`. First launch opens
 3. Wheel to zoom, middle-drag to pan, F/Home to fit. Numeric coordinates translate the selected group; snapping can be bypassed with Alt while dragging.
 4. Use **Source**, **Mask**, **Blend** and **Color** to tune routing and output. Use the source/output wipe to compare the original and mapped image.
 5. Choose **Simulate outputs**, or assign displays and choose **Present fullscreen**. Keep capture sources separate from output areas.
-6. Save the JSON project and its referenced assets. Tools manages application profiles, presets/startup and shortcuts.
+6. Save the JSON project and its referenced assets. Use **Tools → Check my setup** before a physical output run. Start with a one-minute simulation, then assign displays and resolve any reported blockers.
+7. Choose **Tools → Guided camera calibration** for a camera scan, synthetic demonstration or reanalysis of saved captures. Review errors and exposure before applying. Before/after presets and Undo preserve the original output settings. Tools also manages application profiles, presets/startup and shortcuts.
 
 **Stop**, Escape in an output window, and Ctrl+Shift+Escape in the editor stop output. **Blackout** (Ctrl+B by default) clears outputs. These remain available while configuration is locked. **Identify** temporarily numbers the outputs.
 
@@ -68,7 +70,7 @@ OpenCV is optional: omit its bootstrap/configuration arguments for manual mappin
 
 Use **Tools → Application profiles** to select capture, DX11 or DX12, projector and exclusions. Then explicitly select a running window using **Tools → Attach application**. Stop disables processing; the hook DLL remains loaded until the application exits. Restart the application before switching between DX11 and DX12 adapters.
 
-DX12 observes the DIRECT queue of swapchains created after attachment. Existing chains require explicit registration or recreation. Unknown queues pass through with diagnostics; use capture when an application offers neither option. A DLL-load success is not proof of warped output. Both adapters support SDR RGBA8/BGRA8; our native samples cover Present/Present1, multiple chains, resize, recreation and disable/re-enable.
+DX12 observes the DIRECT queue of swapchains created after attachment. Existing chains require explicit registration or recreation. Unknown queues pass through with diagnostics; **Tools → Use window capture for attached application** disables its adapter, routes that window to the selected projector, and starts simulated output. Save and assign displays before presenting fullscreen. A DLL-load success is not proof of warped output. Both adapters support SDR RGBA8/BGRA8; our native samples cover Present/Present1, multiple chains, resize, recreation and disable/re-enable.
 
 MSFS 2020/DX11 and 2024/DX12 profiles are disabled until configured. **Tools → MSFS camera export** selects the version, previews an appended camera and creates a backup before applying. **Restore MSFS camera backup** previews restoration and checks for concurrent changes. Close MSFS before applying edits to an editable `cameras.cfg`. Packaged/encrypted aircraft files are unsupported.
 
@@ -82,17 +84,22 @@ Neither simulator was tested here. Zoom needs simulator-specific calibration. Ca
 ./projection-cli.exe views installation.json frustums.json
 ./projection-cli.exe patterns patterns 1920 1080
 ./projection-cli.exe calibrate captured-patterns 1920 1080 planar-result.json
+./projection-cli.exe scan-plan installation.json scans/new-session
+./projection-scan.exe --scan scans/new-session --simulate
+./projection-cli.exe scan-apply installation.json scans/new-session/result.json calibrated.json --blend --color
 ./projection-cli.exe restore path/to/cameras.cfg
+./projection-qualify.exe --project installation.json --report reports/check-001 --probe-capture
+./projection-qualify.exe --project installation.json --report reports/run-001 --probe-capture --run --simulate --seconds 60
 ./projection-benchmark.exe --outputs 3 --width 1920 --height 1080 --frames 120 --report benchmark.json
 ```
 
-Pattern scanning is offline: project numbered patterns and record matching exposures with fixed exposure/focus. Import the planar fit through Tools. Camera intrinsics require at least six distinct checkerboard views. Synthetic tests validate math, not physical alignment. [Calibration guide](docs/CALIBRATION.md).
+The guided scan isolates selected projectors, presents native-resolution patterns and captures ordered exposures after a configurable settling interval. OpenCV is required for live camera capture and lens correction; manual offline processing and the synthetic demonstration also work without it. Camera intrinsics require at least six distinct checkerboard views. Synthetic tests validate software behavior; physical alignment needs installation hardware. [Calibration guide](docs/CALIBRATION.md).
 
 Enable **Tools → Local control API** for authenticated localhost HTTP/WebSocket editing and telemetry. It is disabled by default and uses a fresh token. [Control, IPC and C ABI contracts](docs/CONTROL_API.md), [architecture](docs/ARCHITECTURE.md).
 
 ## Validation and packaging
 
-CTest covers core/persistence/schema migration, camera fixtures, authentication, D3D11/DX12 pixels, adapters and worker recovery. Tests labeled `desktop` require Windows presentation support; headless CI excludes them with `-LE desktop`. Live capture and remote loading also have separate checks:
+CTest covers core/persistence/schema migration, camera fixtures, authentication, D3D11/DX12 pixels, adapters, worker recovery, report evaluation, timed runs and cancellation. Tests labeled `desktop` require Windows presentation support; headless CI excludes them with `-LE desktop`. Live capture and remote loading also have separate checks:
 
 ```powershell
 # From the build directory with runtime PATH configured

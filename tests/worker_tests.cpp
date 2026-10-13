@@ -7,6 +7,7 @@
 #include <QThread>
 #include <deque>
 #include <iostream>
+#include <fstream>
 using namespace ps;
 int main(int argc, char** argv) {
     QCoreApplication app(argc, argv);
@@ -119,6 +120,19 @@ int main(int argc, char** argv) {
         auto restored = stats(5);
         require(restored.at("outputs") == 3 && generation(restored, stable) == retained,
                 "Output recovery failed");
+        socket.abort();
+        pending.clear();
+        QThread::msleep(100);
+        deadline.restart();
+        while (socket.state() != QLocalSocket::ConnectedState && deadline.elapsed() < 5000) {
+            socket.abort();
+            socket.connectToServer(pipe);
+            if (!socket.waitForConnected(100))
+                QThread::msleep(20);
+        }
+        require(socket.state() == QLocalSocket::ConnectedState, "Control pipe did not reconnect");
+        auto reconnected = stats(5);
+        require(generation(reconnected, stable) == retained, "Control reconnect rebuilt outputs");
         send({{"type", "identify"}, {"seconds", 1}});
         wait([](const Json& j) { return j.value("command", "") == "identify"; });
         send({{"type", "blackout"}, {"enabled", true}});
@@ -136,10 +150,65 @@ int main(int argc, char** argv) {
                                                       {"large_snapshot", true},
                                                       {"simulated_disconnect_recovery", true},
                                                       {"blackout_stop_identify", true},
+                                                      {"control_reconnect", true},
                                                       {"physical_hotplug_qualified", false},
                                                       {"telemetry", dark}}
                                                      .dump(2));
-        std::cout << "Worker IPC, selective rebuild, simulated recovery and control tests passed\n";
+        auto unavailable = project;
+        for (auto& output : unavailable.outputs)
+            output.display = "absent-test-display";
+        save_project(unavailable, dir / "unavailable.json");
+        worker.start(QCoreApplication::applicationDirPath() + "/projection-renderer.exe",
+                     {"--project", QString::fromStdWString((dir / "unavailable.json").wstring()),
+                      "--duration", "1", "--status",
+                      QString::fromStdWString((dir / "deadline-status.json").wstring())});
+        require(worker.waitForStarted(5000) && worker.waitForFinished(5000) && worker.exitCode() == 0,
+                "Worker duration limit failed when all outputs were missing");
+        auto bounded = Json::parse(std::ifstream(dir / "deadline-status.json"));
+        require(bounded.at("type") == "stopped" && bounded.at("outputs") == 0,
+                "Missing-output deadline evidence invalid");
+        auto run_checker = [&](const char* name, bool cancel) {
+            QProcess checker;
+            auto destination = dir / name;
+            checker.start(QCoreApplication::applicationDirPath() + "/projection-qualify.exe",
+                          {"--project", QString::fromStdWString((dir / "project.json").wstring()), "--report",
+                           QString::fromStdWString(destination.wstring()), "--run", "--simulate", "--seconds",
+                           cancel ? "60" : "3", "--warmup", "0"});
+            require(checker.waitForStarted(5000), "Qualification runner did not start");
+            QByteArray progress;
+            QElapsedTimer deadline;
+            deadline.start();
+            bool cancelled = false;
+            while (checker.state() != QProcess::NotRunning && deadline.elapsed() < 20000) {
+                checker.waitForReadyRead(25);
+                progress += checker.readAllStandardOutput();
+                if (cancel && !cancelled && progress.contains("measuring output")) {
+                    checker.write("cancel\n");
+                    checker.waitForBytesWritten(1000);
+                    cancelled = true;
+                }
+            }
+            if (checker.state() != QProcess::NotRunning) {
+                checker.kill();
+                checker.waitForFinished(2000);
+                throw std::runtime_error("Qualification runner timeout");
+            }
+            require(checker.exitCode() == (cancel ? 3 : 2),
+                    "Qualification exit code does not distinguish simulation/cancellation");
+            auto summary = Json::parse(std::ifstream(destination / "summary.json"));
+            require(!summary.at("release_qualified").get<bool>(),
+                    "Runner falsely claimed release qualification");
+            require(summary.value("cancelled", false) == cancel, "Cancellation was not retained");
+            auto stopped = Json::parse(std::ifstream(destination / "worker-status.json"));
+            require(stopped.at("type") == "stopped", "Qualification runner left output process running");
+            require(stopped.at("blackout") == true, "Qualification runner did not black out before stopping");
+            return summary;
+        };
+        auto normal_run = run_checker("short-run", false), cancelled_run = run_checker("cancelled-run", true);
+        atomic_write("qualification-runner-results.json",
+                     Json{{"timed_run", normal_run}, {"cancelled_run", cancelled_run}}.dump(2));
+        std::cout << "Worker IPC, selective rebuild, simulated recovery, timed runner and cancellation tests "
+                     "passed\n";
         return 0;
     } catch (const std::exception& e) {
         worker.kill();

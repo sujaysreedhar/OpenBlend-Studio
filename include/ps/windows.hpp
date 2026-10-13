@@ -119,10 +119,13 @@ class DesktopCapture {
         return view_.get();
     }
     unsigned width() const {
-        return width_;
+        return rotation_ == DXGI_MODE_ROTATION_ROTATE90 || rotation_ == DXGI_MODE_ROTATION_ROTATE270 ? height_
+                                                                                                     : width_;
     }
     unsigned height() const {
-        return height_;
+        return rotation_ == DXGI_MODE_ROTATION_ROTATE90 || rotation_ == DXGI_MODE_ROTATION_ROTATE270
+                   ? width_
+                   : height_;
     }
 };
 struct SourceTexture {

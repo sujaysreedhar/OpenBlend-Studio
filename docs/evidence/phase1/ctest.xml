@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="9"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="22"
+	timestamp="2026-10-12T18:56:14"
+	>
+	<testcase name="core" classname="core" time="0.0990298" status="run">
+		<properties/>
+		<system-out>2194 checks, 0 failures
+</system-out>
+	</testcase>
+	<testcase name="qualification" classname="qualification" time="0.0398226" status="run">
+		<properties/>
+		<system-out>Qualification evaluator failures: 0
+</system-out>
+	</testcase>
+	<testcase name="camera" classname="camera" time="0.541803" status="run">
+		<properties/>
+		<system-out>{
+  "accepted_views": 10,
+  "camera_matrix": [
+    900.9597552463314,
+    0.0,
+    637.8366059329641,
+    0.0,
+    911.798446485433,
+    356.1752189877591,
+    0.0,
+    0.0,
+    1.0
+  ],
+  "distortion": [
+    -0.06304487927519424,
+    2.043184342419284,
+    -0.001471707323091103,
+    0.00010234676405023588,
+    -16.57856899263169
+  ],
+  "height": 720,
+  "rms_pixels": 0.32361923380053714,
+  "width": 1280
+}
+</system-out>
+	</testcase>
+	<testcase name="control" classname="control" time="0.161867" status="run">
+		<properties/>
+		<system-out>HTTP authentication, command errors, WebSocket and token rotation passed
+</system-out>
+	</testcase>
+	<testcase name="worker" classname="worker" time="18.8218" status="run">
+		<properties>
+			<property name="cmake_labels" value="desktop"/>
+		</properties>
+		<system-out>Worker IPC, selective rebuild, simulated recovery, timed runner and cancellation tests passed
+</system-out>
+	</testcase>
+	<testcase name="gpu" classname="gpu" time="0.223131" status="run">
+		<properties/>
+		<system-out>D3D11 WARP render checks: 0 failures
+</system-out>
+	</testcase>
+	<testcase name="dx12" classname="dx12" time="0.329089" status="run">
+		<properties/>
+		<system-out>identity max pixel error=0
+cache reuse max pixel error=0
+curved warp max pixel error=0
+feathered mask max pixel error=0
+inverted mask max pixel error=0
+linear blend and color max pixel error=0
+blackout max pixel error=0
+empty output max pixel error=0
+DX12 regression failures: 0
+</system-out>
+	</testcase>
+	<testcase name="adapter11" classname="adapter11" time="1.16417" status="run">
+		<properties>
+			<property name="cmake_labels" value="desktop"/>
+		</properties>
+		<system-out>DX11 adapter failures: 0
+</system-out>
+	</testcase>
+	<testcase name="adapter12" classname="adapter12" time="1.32776" status="run">
+		<properties>
+			<property name="cmake_labels" value="desktop"/>
+		</properties>
+		<system-out>create initial DX12 chain
+create second DX12 chain
+recreate DX12 chain
+DX12 adapter failures: 0
+</system-out>
+	</testcase>
+</testsuite>

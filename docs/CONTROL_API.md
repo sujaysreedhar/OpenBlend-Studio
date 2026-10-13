@@ -28,7 +28,7 @@ Connect to `ws://127.0.0.1:<websocket_port>` with the same authorization header.
 
 ## Editor / worker IPC
 
-The editor launches `projection-renderer --project <runtime.json> --pipe <random-name> --status <status.json>`. `--blackout` starts black. The local named pipe carries newline-delimited UTF-8 JSON up to 32 MiB. Protocol 2 commands:
+The editor launches `projection-renderer --project <runtime.json> --pipe <random-name> --status <status.json>`. `--blackout` starts black. `--duration <seconds>` bounds wall-clock runtime even if every output is unavailable; `--native-size` makes windowed client areas match configured pixel sizes. Without it, windowed simulation remains small. The local named pipe carries newline-delimited UTF-8 JSON up to 32 MiB. Protocol 2 commands:
 
 ```json
 {"type":"project","revision":1,"project":{"schema_version":2,"...":"full document"}}
@@ -40,7 +40,7 @@ The editor launches `projection-renderer --project <runtime.json> --pipe <random
 
 Revisions increase. Invalid candidates leave the accepted project unchanged. A stale base returns `error` with current `revision` and `resync_required:true`. `ack` contains `command` and accepted `revision`. The editor coalesces edits with one project update in flight and resynchronizes on timeout. Legacy full snapshots without revision remain accepted.
 
-`stats` includes per-output GPU, CPU submission, present interval and source-age-at-submit distributions (rolling p50/p95/p99, lifetime mean/max), resource counts/generations, occlusion, working set, GPU memory and source/recovery diagnostics. `fps` is render cycles per second, not physical refresh. Unavailable measurements are null. `dropped_frames:null` and `physical_latency_measured:false` must not be interpreted as zero latency/drops.
+`stats` includes per-output GPU, CPU submission, present interval and source-age-at-submit distributions (rolling p50/p95/p99, lifetime mean/max), resource counts/generations, occlusion, working set, GPU memory and source/recovery diagnostics. `fps` is render cycles per second, not physical refresh. `elapsed_seconds` is monotonic worker time; per-output `width`, `height`, `display`, `refresh_hz` and `failures` describe the presentation target. Per-source `used` distinguishes routed resources from unused entries on another GPU, and `last_frame_age_ms` continues aging when a capture stops delivering new frames. A disconnected local control client may reconnect without rebuilding output resources. Unavailable measurements are null. `dropped_frames:null` and `physical_latency_measured:false` must not be interpreted as zero latency/drops.
 
 Escape in an output window stops the worker. Editor Stop first sends IPC, then terminates its own worker if it cannot exit in time. Closing the editor disables its adapter manifest before deleting temporary files.
 

@@ -1,0 +1,279 @@
+{
+  "application_version": "0.3.0",
+  "cancelled": false,
+  "checks": [
+    {
+      "action": "",
+      "detail": "Measured interval excludes warm-up",
+      "id": "duration",
+      "status": "pass"
+    },
+    {
+      "action": "",
+      "detail": "Capture and asset errors across all samples",
+      "id": "source_health",
+      "status": "fail"
+    },
+    {
+      "action": "",
+      "detail": "Missing outputs and device recoveries during the measured interval",
+      "id": "output_health",
+      "status": "pass"
+    },
+    {
+      "action": "Use visible displays at the requested mode; inspect the recorded telemetry",
+      "detail": "Simulation exercises software only",
+      "id": "output/18dd8c87a72e0fc0-3",
+      "status": "not_run"
+    },
+    {
+      "action": "Use visible displays at the requested mode; inspect the recorded telemetry",
+      "detail": "Simulation exercises software only",
+      "id": "output/18dd8c87a72e0fc0-5",
+      "status": "not_run"
+    },
+    {
+      "action": "Use visible displays at the requested mode; inspect the recorded telemetry",
+      "detail": "Simulation exercises software only",
+      "id": "output/18dd8c87a72e0fc0-7",
+      "status": "not_run"
+    },
+    {
+      "action": "Use a moving desktop/window source to exercise capture",
+      "detail": "Capture frame arrival during the run",
+      "id": "live_capture",
+      "status": "blocked"
+    },
+    {
+      "action": "",
+      "detail": "Worker acknowledged and reported blackout before stopping",
+      "id": "blackout_control",
+      "status": "pass"
+    },
+    {
+      "action": "",
+      "detail": "Worker exited normally after Stop",
+      "id": "graceful_stop",
+      "status": "pass"
+    },
+    {
+      "action": "Measure the complete capture-to-display path externally; retain simulator and physical-display test records",
+      "detail": "Present-call rate and source age do not measure physical latency or dropped display frames",
+      "id": "physical_delivery",
+      "status": "not_run"
+    }
+  ],
+  "dropped_frames": null,
+  "journal_bytes": 215736,
+  "kind": "output-run",
+  "memory": {
+    "first_bytes": 64311296,
+    "last_bytes": 67354624,
+    "peak_bytes": 67354624
+  },
+  "observed_seconds": 60.665954000000006,
+  "outputs": {
+    "18dd8c87a72e0fc0-3": {
+      "ever_occluded": true,
+      "interrupted": false,
+      "last_telemetry": {
+        "cpu_submission_ms": {
+          "max": 43.504,
+          "mean": 0.2601902408111535,
+          "p50": 0.1368,
+          "p95": 0.4178,
+          "p99": 0.5733,
+          "percentile_window": 789,
+          "samples": 789
+        },
+        "curve_uploads": 1,
+        "display": "",
+        "error": "",
+        "failures": 0,
+        "gpu_ms": {
+          "max": 35.5328,
+          "mean": 22.60546358322746,
+          "p50": 29.396992,
+          "p95": 30.2848,
+          "p99": 31.789056,
+          "percentile_window": 787,
+          "samples": 787
+        },
+        "height": 216,
+        "late_submissions": 3,
+        "mask_uploads": 0,
+        "mesh_uploads": 1,
+        "occluded": 180,
+        "present_interval_ms": {
+          "max": 52.4731,
+          "mean": 31.17151875,
+          "p50": 31.3031,
+          "p95": 45.4536,
+          "p99": 46.288,
+          "percentile_window": 608,
+          "samples": 608
+        },
+        "presentation_statistics": {
+          "present_count": 783,
+          "present_refresh_count": 0,
+          "sync_refresh_count": 0
+        },
+        "presents": 609,
+        "refresh_hz": 32.0,
+        "resource_generation": 1,
+        "source_age_at_submit_ms": {
+          "max": 509.3523,
+          "mean": 344.73125194805226,
+          "p50": 424.9389,
+          "p95": 486.213,
+          "p99": 500.9783,
+          "percentile_window": 231,
+          "samples": 231
+        },
+        "waitable": true,
+        "width": 384
+      },
+      "name": "Projector 1",
+      "size_mismatch": true,
+      "successful_present_calls_per_second": 10.038579464191727
+    },
+    "18dd8c87a72e0fc0-5": {
+      "ever_occluded": true,
+      "interrupted": false,
+      "last_telemetry": {
+        "cpu_submission_ms": {
+          "max": 0.2994,
+          "mean": 0.030111787072243313,
+          "p50": 0.0315,
+          "p95": 0.0482,
+          "p99": 0.0664,
+          "percentile_window": 789,
+          "samples": 789
+        },
+        "curve_uploads": 1,
+        "display": "",
+        "error": "",
+        "failures": 0,
+        "gpu_ms": {
+          "max": 2.696192,
+          "mean": 0.30337854129605807,
+          "p50": 0.19456,
+          "p95": 1.624064,
+          "p99": 2.067456,
+          "percentile_window": 787,
+          "samples": 787
+        },
+        "height": 216,
+        "late_submissions": 3,
+        "mask_uploads": 0,
+        "mesh_uploads": 1,
+        "occluded": 180,
+        "present_interval_ms": {
+          "max": 52.4731,
+          "mean": 31.17151875,
+          "p50": 31.3031,
+          "p95": 45.4536,
+          "p99": 46.288,
+          "percentile_window": 608,
+          "samples": 608
+        },
+        "presentation_statistics": {
+          "present_count": 783,
+          "present_refresh_count": 0,
+          "sync_refresh_count": 0
+        },
+        "presents": 609,
+        "refresh_hz": 32.0,
+        "resource_generation": 2,
+        "source_age_at_submit_ms": {
+          "max": 509.4796,
+          "mean": 110.41719698558326,
+          "p50": 7.8947,
+          "p95": 469.6807,
+          "p99": 486.5336,
+          "percentile_window": 763,
+          "samples": 763
+        },
+        "waitable": true,
+        "width": 384
+      },
+      "name": "Projector 2",
+      "size_mismatch": true,
+      "successful_present_calls_per_second": 10.038579464191727
+    },
+    "18dd8c87a72e0fc0-7": {
+      "ever_occluded": true,
+      "interrupted": false,
+      "last_telemetry": {
+        "cpu_submission_ms": {
+          "max": 0.533,
+          "mean": 0.0132575411913815,
+          "p50": 0.0111,
+          "p95": 0.0185,
+          "p99": 0.0433,
+          "percentile_window": 789,
+          "samples": 789
+        },
+        "curve_uploads": 1,
+        "display": "",
+        "error": "",
+        "failures": 0,
+        "gpu_ms": {
+          "max": 10.345471999999999,
+          "mean": 0.319688376111817,
+          "p50": 0.187392,
+          "p95": 0.241664,
+          "p99": 5.794816,
+          "percentile_window": 787,
+          "samples": 787
+        },
+        "height": 216,
+        "late_submissions": 3,
+        "mask_uploads": 0,
+        "mesh_uploads": 1,
+        "occluded": 180,
+        "present_interval_ms": {
+          "max": 52.4731,
+          "mean": 31.17151875,
+          "p50": 31.3031,
+          "p95": 45.4536,
+          "p99": 46.288,
+          "percentile_window": 608,
+          "samples": 608
+        },
+        "presentation_statistics": {
+          "present_count": 783,
+          "present_refresh_count": 0,
+          "sync_refresh_count": 0
+        },
+        "presents": 609,
+        "refresh_hz": 32.0,
+        "resource_generation": 3,
+        "source_age_at_submit_ms": {
+          "max": 509.7129,
+          "mean": 111.6018778505895,
+          "p50": 9.2646,
+          "p95": 469.8898,
+          "p99": 486.7329,
+          "percentile_window": 763,
+          "samples": 763
+        },
+        "waitable": true,
+        "width": 384
+      },
+      "name": "Projector 3",
+      "size_mismatch": true,
+      "successful_present_calls_per_second": 10.038579464191727
+    }
+  },
+  "physical_latency_ms": null,
+  "release_qualified": false,
+  "requested_seconds": 60.0,
+  "samples": 61,
+  "schema_version": 1,
+  "setup_status": "incomplete",
+  "simulated": true,
+  "status": "fail",
+  "target_hz": 60.0,
+  "warmup_seconds": 5.0
+}

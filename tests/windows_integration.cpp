@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 #include "ps/windows.hpp"
+#include "ps/source_registry.hpp"
 #include <chrono>
 #include <fstream>
 #include <iostream>
@@ -44,7 +45,7 @@ int main(int argc, char** argv) {
         std::filesystem::create_directories(scratch);
         auto info = scratch / "sample.json";
         Process sample(dir / "projection-dx11-sample.exe",
-                       L"--white --seconds 20 --info \"" + info.wstring() + L"\"");
+                       L"--white --seconds 60 --info \"" + info.wstring() + L"\"");
         for (int i = 0; i < 100 && !std::filesystem::exists(info); ++i)
             std::this_thread::sleep_for(std::chrono::milliseconds(50));
         auto app = read(info);
@@ -129,32 +130,98 @@ int main(int argc, char** argv) {
         };
         if (!diagnostics(true) || (!adapter_only && !observe(true)))
             throw std::runtime_error("DX11 hook did not warp the application");
-        // Resize runs at frame 180 (~3 s); continue rendering across it.
-        std::this_thread::sleep_for(std::chrono::seconds(4));
-        if (!diagnostics(true) || (!adapter_only && !observe(true)))
-            throw std::runtime_error("Warp failed after swapchain resize");
+        // Explicitly request resize: frame-count timing varies on remote/occluded desktops.
+        PostMessageW(hwnd, WM_APP + 1, 0, 0);
         Json after_resize;
         for (int i = 0; i < 300; ++i) {
-            after_resize = read(manifest.wstring() + L".status.json");
-            if (after_resize.value("width", 0) == 960)
-                break;
+            try {
+                // A replacement can briefly deny a reader on Windows; retry within the deadline.
+                after_resize = read(manifest.wstring() + L".status.json");
+                if (after_resize.value("width", 0) == 960)
+                    break;
+            } catch (const std::exception&) {
+            }
             std::this_thread::sleep_for(std::chrono::milliseconds(20));
         }
-        if (after_resize.value("width", 0) != 960)
+        if (!after_resize.is_object() || after_resize.value("width", 0) != 960)
             throw std::runtime_error("Adapter did not recreate resized resources");
+        if (!diagnostics(true) || (!adapter_only && !observe(true)))
+            throw std::runtime_error("Warp failed after swapchain resize");
         config["enabled"] = false;
         atomic_write(manifest, config.dump());
         if (!diagnostics(false) || (!adapter_only && !observe(false)))
             throw std::runtime_error("Disabling warp did not restore original presentation");
+        auto capture_project = example_project();
+        auto& source = capture_project.sources[0];
+        source.type = "window";
+        source.window_handle = reinterpret_cast<std::uint64_t>(hwnd);
+        source.window_title = "Projection Studio DX11 Test";
+        // Imported JSON may use forward slashes for an executable selected with native separators.
+        source.executable = (dir / "projection-dx11-sample.exe").generic_string();
+        source.window_class = "ProjectionStudioDX11Test";
+        std::unique_ptr<SourceRegistry> registry;
+        auto source_visible = [&] {
+            for (int i = 0; i < 240; ++i) {
+                MSG m;
+                while (PeekMessageW(&m, nullptr, 0, 0, PM_REMOVE)) {
+                    TranslateMessage(&m);
+                    DispatchMessageW(&m);
+                }
+                registry->begin_frame();
+                auto frame = registry->get(source.id);
+                if (frame.view) {
+                    auto texture = render_offscreen(
+                        device.get(), renderer, output, [&](const auto&) { return frame; }, 128, 64);
+                    auto pixels = read_pixels(device.get(), texture.get());
+                    if (pixels[(32 * 128 + 64) * 4] > 245)
+                        return true;
+                }
+                std::this_thread::sleep_for(std::chrono::milliseconds(20));
+            }
+            return false;
+        };
+        if (!adapter_only) {
+            capture.reset();
+            registry = std::make_unique<SourceRegistry>(device.get(), dir);
+            registry->configure(capture_project);
+            if (!source_visible())
+                throw std::runtime_error("Registry did not capture the source");
+            ShowWindow(hwnd, SW_MINIMIZE);
+            std::this_thread::sleep_for(std::chrono::milliseconds(150));
+            registry->begin_frame();
+            if (registry->get(source.id).view || registry->errors().empty())
+                throw std::runtime_error("Minimized source retained stale visible pixels");
+            ShowWindow(hwnd, SW_SHOWNOACTIVATE);
+            if (!source_visible())
+                throw std::runtime_error("Capture did not recover after restoration");
+        }
         PostMessageW(hwnd, WM_CLOSE, 0, 0);
         if (sample.wait(5000))
             throw std::runtime_error("Sample reported state corruption");
         auto done = read(info.wstring() + L".done");
         if (done["state_errors"] != 0 || done["resizes"] != 1)
             throw std::runtime_error("State preservation / resize assertions failed");
+        if (!adapter_only) {
+            registry->begin_frame();
+            if (registry->get(source.id).view)
+                throw std::runtime_error("Closed source retained visible pixels");
+            auto new_info = scratch / "restarted.json";
+            Process restarted(dir / "projection-dx11-sample.exe",
+                              L"--white --seconds 15 --info \"" + new_info.wstring() + L"\"");
+            for (int i = 0; i < 100 && !std::filesystem::exists(new_info); ++i)
+                std::this_thread::sleep_for(std::chrono::milliseconds(30));
+            auto new_window = reinterpret_cast<HWND>(read(new_info).at("hwnd").get<std::uint64_t>());
+            Stop stop_restart{new_window};
+            if (resolve_window(source) != new_window || !source_visible())
+                throw std::runtime_error("Capture did not reconnect to restarted application identity");
+            PostMessageW(new_window, WM_CLOSE, 0, 0);
+            restarted.wait(5000);
+        }
         atomic_write(dir / "integration-results.json", Json{{"wgc", !adapter_only},
                                                             {"dx11_warp", true},
                                                             {"disable_configuration", true},
+                                                            {"minimize_restore", !adapter_only},
+                                                            {"source_restart_reconnect", !adapter_only},
                                                             {"sample", done},
                                                             {"physical_projectors", false}}
                                                            .dump(2));

@@ -1,0 +1,99 @@
+{
+  "adapters": [
+    {
+      "dedicated_memory_bytes": 8432648192,
+      "device_id": 9479,
+      "dx11_device": true,
+      "dx12_device": true,
+      "luid": "0:56073",
+      "name": "NVIDIA GeForce RTX 3050",
+      "software": false,
+      "umd_driver_version": "32.0.15.9186",
+      "vendor_id": 4318
+    },
+    {
+      "dedicated_memory_bytes": 8432648192,
+      "device_id": 9479,
+      "dx11_device": true,
+      "dx12_device": true,
+      "luid": "0:403379197",
+      "name": "NVIDIA GeForce RTX 3050",
+      "software": false,
+      "umd_driver_version": "32.0.15.9186",
+      "vendor_id": 4318
+    },
+    {
+      "dedicated_memory_bytes": 0,
+      "device_id": 140,
+      "dx11_device": true,
+      "dx12_device": true,
+      "luid": "0:60097",
+      "name": "Microsoft Basic Render Driver",
+      "software": true,
+      "umd_driver_version": "10.0.26100.9278",
+      "vendor_id": 5140
+    }
+  ],
+  "application_version": "0.3.0",
+  "applications": [],
+  "capture": {
+    "18dd8c87a72e0fc0-2": {
+      "error": "Start desktop duplication (0x80070005)",
+      "first_timestamp_100ns": null,
+      "frames": 0,
+      "last_timestamp_100ns": null,
+      "type": "desktop"
+    }
+  },
+  "checks": [
+    {
+      "action": "",
+      "detail": "Project structure and routes are valid",
+      "id": "project",
+      "status": "pass"
+    },
+    {
+      "action": "",
+      "detail": "Attached displays enumerated",
+      "id": "desktop",
+      "status": "pass"
+    },
+    {
+      "action": "Assign and enable the projector before running a physical output test",
+      "detail": "Projector has no connected display assignment",
+      "id": "output/18dd8c87a72e0fc0-3",
+      "status": "blocked"
+    },
+    {
+      "action": "Check source selection, session visibility, GPU routing and capture permissions",
+      "detail": "Start desktop duplication (0x80070005)",
+      "id": "capture/18dd8c87a72e0fc0-2",
+      "status": "blocked"
+    }
+  ],
+  "created_utc": "2026-10-12T13:24:20Z",
+  "displays": [
+    {
+      "adapter_luid": "0:56073",
+      "height": 1080,
+      "id": "\\\\.\\DISPLAY225",
+      "name": "\\\\.\\DISPLAY225 / NVIDIA GeForce RTX 3050",
+      "refresh_hz": 32,
+      "rotation": 1,
+      "width": 1920,
+      "x": 0,
+      "y": 0
+    }
+  ],
+  "kind": "setup-check",
+  "os": {
+    "build": "26200",
+    "display_version": "25H2",
+    "remote_session": true
+  },
+  "project_id": "18dd8c87a72e0fc0-1",
+  "release_qualified": false,
+  "schema_version": 1,
+  "status": "incomplete",
+  "stores_captured_pixels": false
+}

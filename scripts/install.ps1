@@ -22,5 +22,5 @@ if(!$NoShortcut){
     $taskLink=$taskShell.CreateShortcut($taskShortcut)
     $taskLink.TargetPath=Join-Path $taskDestination 'projection-studio.exe';$taskLink.WorkingDirectory=$taskDestination;$taskLink.Save()
 }
-@{product='ProjectionStudio';version='0.2.0';files=$taskFiles;shortcut=$taskShortcut}|ConvertTo-Json -Depth 4|Set-Content -LiteralPath (Join-Path $taskDestination '.projection-studio-install.json') -Encoding utf8
+@{product='ProjectionStudio';version='0.4.0';files=$taskFiles;shortcut=$taskShortcut}|ConvertTo-Json -Depth 4|Set-Content -LiteralPath (Join-Path $taskDestination '.projection-studio-install.json') -Encoding utf8
 Write-Host "Installed to $taskDestination"

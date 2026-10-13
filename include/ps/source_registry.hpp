@@ -15,6 +15,7 @@ class SourceRegistry {
         std::chrono::steady_clock::time_point retry{};
         std::string error;
         std::uint64_t frames{}, failures{};
+        bool used{};
         std::int64_t timestamp{};
         Measurements arrival_age;
     };
@@ -35,6 +36,7 @@ class SourceRegistry {
                 e = {};
                 e.source = source;
             }
+            e.used = false;
         }
         frame_.clear();
     }
@@ -48,6 +50,7 @@ class SourceRegistry {
         if (it == entries_.end())
             return {nullptr, 2};
         auto& e = it->second;
+        e.used = true;
         auto& s = e.source;
         SourceTexture result{nullptr, 2};
         auto now = std::chrono::steady_clock::now();
@@ -107,6 +110,12 @@ class SourceRegistry {
         Json result = Json::object();
         for (auto& [id, e] : entries_)
             result[id] = {{"frames", e.frames},
+                          {"source_id", id},
+                          {"type", e.source.type},
+                          {"used", e.used},
+                          {"last_frame_age_ms", e.timestamp > 0
+                                                    ? Json(double(qpc_100ns() - e.timestamp) / 10000.)
+                                                    : Json(nullptr)},
                           {"recoveries", e.failures},
                           {"capture_arrival_age_ms", e.arrival_age.json()},
                           {"last_timestamp_100ns", e.timestamp},

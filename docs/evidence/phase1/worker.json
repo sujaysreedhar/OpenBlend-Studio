@@ -1,0 +1,174 @@
+{
+  "blackout_stop_identify": true,
+  "control_reconnect": true,
+  "large_snapshot": true,
+  "passed": true,
+  "physical_hotplug_qualified": false,
+  "revision_resync": true,
+  "selective_rebuild": true,
+  "simulated_disconnect_recovery": true,
+  "telemetry": {
+    "adapters": {
+      "0:56073": {
+        "memory": {
+          "budget_bytes": 7627341824,
+          "used_bytes": 12689408
+        },
+        "name": "NVIDIA GeForce RTX 3050"
+      }
+    },
+    "blackout": true,
+    "device_recoveries": 0,
+    "dropped_frames": null,
+    "elapsed_seconds": 8.123764,
+    "fps": 5.908590777096013,
+    "frames": 48,
+    "output_errors": {},
+    "output_stats": {
+      "18ddcb22735cf308-4": {
+        "cpu_submission_ms": {
+          "max": 0.1148,
+          "mean": 0.04770833333333333,
+          "p50": 0.0419,
+          "p95": 0.064,
+          "p99": 0.064,
+          "percentile_window": 12,
+          "samples": 12
+        },
+        "curve_uploads": 1,
+        "display": "",
+        "error": "",
+        "failures": 0,
+        "gpu_ms": {
+          "max": 0.207872,
+          "mean": 0.14782836363636365,
+          "p50": 0.193536,
+          "p95": 0.207872,
+          "p99": 0.207872,
+          "percentile_window": 11,
+          "samples": 11
+        },
+        "height": 216,
+        "late_submissions": 0,
+        "mask_uploads": 0,
+        "mesh_uploads": 1,
+        "occluded": 12,
+        "present_interval_ms": null,
+        "presentation_statistics": {
+          "present_count": 0,
+          "present_refresh_count": 0,
+          "sync_refresh_count": 0
+        },
+        "presents": 0,
+        "refresh_hz": 32.0,
+        "resource_generation": 5,
+        "source_age_at_submit_ms": null,
+        "waitable": true,
+        "width": 384
+      },
+      "18ddcb22735cf308-6": {
+        "cpu_submission_ms": {
+          "max": 0.2724,
+          "mean": 0.046684375,
+          "p50": 0.0387,
+          "p95": 0.0628,
+          "p99": 0.1794,
+          "percentile_window": 32,
+          "samples": 32
+        },
+        "curve_uploads": 1,
+        "display": "",
+        "error": "",
+        "failures": 0,
+        "gpu_ms": {
+          "max": 1.278976,
+          "mean": 0.1450776774193548,
+          "p50": 0.136192,
+          "p95": 0.181248,
+          "p99": 0.218112,
+          "percentile_window": 31,
+          "samples": 31
+        },
+        "height": 216,
+        "late_submissions": 0,
+        "mask_uploads": 0,
+        "mesh_uploads": 1,
+        "occluded": 32,
+        "present_interval_ms": null,
+        "presentation_statistics": {
+          "present_count": 0,
+          "present_refresh_count": 0,
+          "sync_refresh_count": 0
+        },
+        "presents": 0,
+        "refresh_hz": 32.0,
+        "resource_generation": 2,
+        "source_age_at_submit_ms": null,
+        "waitable": true,
+        "width": 384
+      },
+      "18ddcb22735cf308-8": {
+        "cpu_submission_ms": {
+          "max": 0.318,
+          "mean": 0.02170625000000001,
+          "p50": 0.0117,
+          "p95": 0.0183,
+          "p99": 0.019,
+          "percentile_window": 32,
+          "samples": 32
+        },
+        "curve_uploads": 1,
+        "display": "",
+        "error": "",
+        "failures": 0,
+        "gpu_ms": {
+          "max": 0.190464,
+          "mean": 0.11719845161290322,
+          "p50": 0.146432,
+          "p95": 0.188416,
+          "p99": 0.18944,
+          "percentile_window": 31,
+          "samples": 31
+        },
+        "height": 216,
+        "late_submissions": 0,
+        "mask_uploads": 0,
+        "mesh_uploads": 1,
+        "occluded": 32,
+        "present_interval_ms": null,
+        "presentation_statistics": {
+          "present_count": 0,
+          "present_refresh_count": 0,
+          "sync_refresh_count": 0
+        },
+        "presents": 0,
+        "refresh_hz": 32.0,
+        "resource_generation": 3,
+        "source_age_at_submit_ms": null,
+        "waitable": true,
+        "width": 384
+      }
+    },
+    "outputs": 3,
+    "physical_latency_measured": false,
+    "protocol": 2,
+    "render_ms": 1.1635,
+    "revision": 5,
+    "source_errors": {},
+    "source_stats": {
+      "0:56073/18ddcb22735cf308-3": {
+        "capture_arrival_age_ms": null,
+        "error": "",
+        "frames": 0,
+        "last_frame_age_ms": null,
+        "last_timestamp_100ns": 0,
+        "recoveries": 0,
+        "source_id": "18ddcb22735cf308-3",
+        "type": "pattern",
+        "used": true
+      }
+    },
+    "type": "stats",
+    "working_set_bytes": 56823808
+  }
+}

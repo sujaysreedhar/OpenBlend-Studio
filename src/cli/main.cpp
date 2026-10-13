@@ -2,16 +2,18 @@
 #include "ps/calibration.hpp"
 #include "ps/model.hpp"
 #include "ps/simulator.hpp"
+#include "ps/scan.hpp"
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 int main(int argc, char** argv) {
     try {
         if (argc < 2) {
-            std::cout << "Projection Studio 0.1\nCommands:\n  example <project.json> [projectors] "
+            std::cout << "Projection Studio 0.4\nCommands:\n  example <project.json> [projectors] "
                          "[irregular]\n  validate <project.json>\n  views <project.json> <views.json>\n  "
                          "patterns <directory> <width> <height>\n  calibrate <capture-directory> "
-                         "<projector-width> <projector-height> <result.json>\n  capabilities\n";
+                         "<projector-width> <projector-height> <result.json>\n  scan-plan <project.json> <empty-folder>\n"
+                         "  scan-analyze <capture-folder>\n  scan-apply <project.json> <result.json> <new-project.json> [--blend] [--color]\n  capabilities\n";
             return 0;
         }
         std::string command = argv[1];
@@ -19,7 +21,19 @@ int main(int argc, char** argv) {
             if (argc < n)
                 throw std::invalid_argument("Missing command arguments; run without arguments for help");
         };
-        if (command == "example") {
+        if (command == "scan-plan") {
+            require(4);auto p=ps::load_project(argv[2]);std::vector<std::string> ids;
+            for(auto& o:p.outputs)if(o.enabled)ids.push_back(o.id);
+            ps::create_scan(argv[3],ps::scan_manifest(p,ids));
+        } else if (command == "scan-analyze") {
+            require(3);auto j=ps::analyze_scan(argv[2]);
+            std::cout<<j.at("targets").size()<<" projector(s) analyzed; result.json written\n";
+        } else if (command == "scan-apply") {
+            require(5);bool blend=false,color=false;
+            for(int i=5;i<argc;++i){std::string flag=argv[i];if(flag=="--blend")blend=true;else if(flag=="--color")color=true;else throw std::invalid_argument("Unknown scan-apply option");}
+            std::ifstream in(argv[3]);ps::Json j;in>>j;
+            ps::save_project(ps::apply_scan(ps::load_project(argv[2]),j,blend,color),argv[4]);
+        } else if (command == "example") {
             require(3);
             ps::save_project(ps::example_project(argc > 3 ? std::stoi(argv[3]) : 1,
                                                  argc > 4 && std::string(argv[4]) == "irregular"),
@@ -92,8 +106,10 @@ int main(int argc, char** argv) {
             require(3);
             ps::restore_backup(argv[2]);
         } else if (command == "capabilities")
-            std::cout << "Project format v1; manual warp/mask/blend/color; desktop/window capture on "
-                         "Windows; DX11 adapter; planar Gray-code decoding; generic frustum export. See "
+            std::cout << "Project format v2; manual warp/mask/blend/color; desktop/window capture on "
+                         "Windows; DX11/DX12 adapters; guided planar Gray-code scans and relative RGB "
+                         "response estimates; generic frustum export. Live camera capture requires an "
+                         "OpenCV build. See "
                          "docs/FEATURES.md for validation status.\n";
         else
             throw std::invalid_argument("Unknown command");

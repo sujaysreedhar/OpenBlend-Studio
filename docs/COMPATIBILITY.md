@@ -5,7 +5,7 @@
 | DX11 x64 SDR | Explicit attach, Present/Present1, resize/recreation, context restoration, multiple chains | Own samples pass; MSFS 2020 and games unqualified |
 | DX12 x64 SDR | Native renderer, observed/registered DIRECT queue, Present/Present1, resize/recreation, multiple chains | Pixel and adapter samples pass; MSFS 2024 unqualified |
 | Desktop Duplication | GPU rotation 0/90/180/270 degrees and color/monochrome/masked cursor composition | Synthetic GPU checks pass; live rotated monitors unqualified |
-| WGC | Window identity and reconnect/retry, optional cursor | Session creation works; no frames in this occluded desktop |
+| WGC | Window identity and reconnect/retry, optional cursor | 0.3 sample captures original/warped/restored frames and recovers after minimize and source restart; physical output unqualified |
 | MSFS 2020/2024 cameras | Version selection, append preview, stale-file guard, backup/restore | Fixture tests pass; simulator validation outstanding |
 | GL/Vulkan/DX9/10, x86, HDR/stereo | Future backends | Unsupported |
 
@@ -22,3 +22,5 @@ Orientation, zoom and image warping cannot generate missing viewpoints. Exact zo
 ## External qualification
 
 Record Windows build, simulator/application/aircraft version, API/settings, GPU/LUID, driver, display models, resolution, rotation and refresh. Measure capture availability, latency, present intervals, actual drops and memory over an endurance run. Exercise resize, minimize, DPI changes, source exit/restart, display disconnect/reconnect, device removal, presets, blackout and Stop. Simulated recovery, offscreen timings and WARP pixels do not qualify physical tests.
+
+Use **Tools → Check my setup** or `projection-qualify` to capture the environment and perform timed runs. See [setup and hardware testing](HARDWARE_TESTING.md).

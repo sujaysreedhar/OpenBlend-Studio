@@ -1,0 +1,17 @@
+{
+  "disable_configuration": true,
+  "dx11_warp": true,
+  "minimize_restore": true,
+  "physical_projectors": false,
+  "sample": {
+    "closed_by_message": true,
+    "elapsed_seconds": 2.734704,
+    "frames": 91,
+    "occluded_frames": 0,
+    "requested_seconds": 60,
+    "resizes": 1,
+    "state_errors": 0
+  },
+  "source_restart_reconnect": true,
+  "wgc": true
+}
