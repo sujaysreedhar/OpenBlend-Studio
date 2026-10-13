@@ -1,0 +1,4 @@
+# Preserve calibration captures and screenshots byte-for-byte on every platform.
+*.pgm binary
+*.ppm binary
+*.png binary
